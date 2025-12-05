@@ -1,0 +1,9 @@
+/* src/styles/index.css */
+
+/* Global styles */
+body {
+  background-color: #ffffff;
+  color: #212529; /* Bootstrap dark text */
+  margin: 0;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
