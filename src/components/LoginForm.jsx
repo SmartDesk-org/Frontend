@@ -1,28 +1,44 @@
 // src/components/LoginForm.jsx
-import React, { useState } from 'react';
+import React, { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { login } from "../redux/slices/authSlice";
 
 export default function LoginForm() {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const dispatch = useDispatch();
+  const { loading, error } = useSelector((state) => state.auth);
 
-  const handleEmailChange = e => setEmail(e.target.value);
-  const handlePasswordChange = e => setPassword(e.target.value);
-  const handleSubmit = e => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const handleEmailChange = (e) => setEmail(e.target.value);
+  const handlePasswordChange = (e) => setPassword(e.target.value);
+
+  const handleSubmit = (e) => {
     e.preventDefault();
-    alert(`Logging in with email: ${email}`);
+
+    console.log("🔵 SUBMIT LOGIN →", email);
+
+    dispatch(login({ email, password }))
+      .unwrap()
+      .then((res) => {
+        console.log("🟢 LOGIN SUCCESS:", res);
+        alert("Login successful");
+      })
+      .catch((err) => {
+        console.error("🔴 LOGIN FAILED:", err);
+      });
   };
 
   const handleGoogleAuth = () => {
-    alert('Google Auth Dummy Button Clicked');
+    alert("Google Auth Dummy Button Clicked");
   };
 
   const handleForgotPassword = () => {
-    alert('Forgot password clicked');
+    alert("Forgot password clicked");
   };
 
   return (
     <form onSubmit={handleSubmit} className="d-flex flex-column gap-3">
-
       {/* Email */}
       <div>
         <label htmlFor="email" className="form-label text-secondary mb-1">
@@ -55,21 +71,28 @@ export default function LoginForm() {
         />
       </div>
 
+      {/* Error */}
+      {error && (
+        <p className="text-danger text-center" style={{ fontSize: "0.9rem" }}>
+          {error}
+        </p>
+      )}
+
       {/* Forgot Password */}
       <div className="d-flex justify-content-between align-items-center">
         <button
           type="button"
           onClick={handleForgotPassword}
           className="btn btn-link p-0 text-decoration-none text-primary"
-          style={{ fontSize: '0.9rem' }}
+          style={{ fontSize: "0.9rem" }}
         >
           Forgot Password?
         </button>
       </div>
 
       {/* Sign In Button */}
-      <button type="submit" className="btn btn-primary w-100">
-        Sign In
+      <button type="submit" className="btn btn-primary w-100" disabled={loading}>
+        {loading ? "Signing in..." : "Sign In"}
       </button>
 
       {/* Divider */}
@@ -87,8 +110,7 @@ export default function LoginForm() {
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
-          className=""
-          style={{ height: '20px', width: '20px' }}
+          style={{ height: "20px", width: "20px" }}
           viewBox="0 0 48 48"
           fill="none"
         >

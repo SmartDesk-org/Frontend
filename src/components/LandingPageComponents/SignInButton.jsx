@@ -7,8 +7,8 @@ export default function SignInButton() {
 
   return (
     <button 
-      // onClick={() => navigate('/login')}
-      onClick={() => navigate('/superAdminDashBoard')}
+      onClick={() => navigate('/login')}
+      // onClick={() => navigate('/superAdminDashBoard')}
       className="btn btn-primary px-4 py-2"
     >
       Sign In

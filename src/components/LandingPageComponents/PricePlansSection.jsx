@@ -1,25 +1,19 @@
-// src/components/PricePlansSection.jsx
-import React from 'react';
-
-const plans = [
-  {
-    title: 'Basic',
-    price: '$49/mo',
-    features: ['Desk Booking', 'Employee Check-in', 'Basic Reporting'],
-  },
-  {
-    title: 'Pro',
-    price: '$99/mo',
-    features: ['All Basic Features', 'Meeting Room Booking', 'Real-time Monitoring'],
-  },
-  {
-    title: 'Enterprise',
-    price: 'Custom Pricing',
-    features: ['All Pro Features', 'Dedicated Support', 'Custom Integrations'],
-  },
-];
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchPlans } from "../../redux/slices/subscriptionSlice";
 
 export default function PricePlansSection() {
+  const dispatch = useDispatch();
+  const { plans, loading, error } = useSelector((state) => state.subscription);
+
+  useEffect(() => {
+    dispatch(fetchPlans());
+  }, [dispatch]);
+
+  if (loading) return <p className="text-center">Loading plans...</p>;
+  if (error) return <p className="text-center text-danger">{error}</p>;
+  if (!plans.length) return <p className="text-center">No plans available</p>;
+
   return (
     <section className="py-5 px-3 bg-light">
       <div className="container text-center">
@@ -28,19 +22,44 @@ export default function PricePlansSection() {
         <div className="d-flex flex-column flex-md-row justify-content-center gap-4">
           {plans.map((plan) => (
             <div
-              key={plan.title}
+              key={plan.id}
               className="bg-white rounded shadow p-4 flex-fill"
-              style={{ maxWidth: '350px', margin: '0 auto' }}
+              style={{ maxWidth: "380px", margin: "0 auto" }}
             >
-              <h4 className="fs-4 fw-semibold mb-3">{plan.title}</h4>
-              <p className="fs-2 fw-bold mb-4">{plan.price}</p>
+              {/* Title */}
+              <h4 className="fs-4 fw-semibold mb-3">
+                {plan.subscriptionPlanName}
+              </h4>
 
-              <ul className="text-muted mb-4" style={{ lineHeight: '1.9' }}>
-                {plan.features.map((feature, i) => (
-                  <li key={i}>&#10003; {feature}</li>
-                ))}
+              {/* Prices */}
+              <p className="fs-2 fw-bold mb-4">
+                ₹{plan.priceMonthly}/mo  
+                <br />
+                <span className="fs-6 text-muted">(₹{plan.priceYearly}/year)</span>
+              </p>
+
+              {/* Description */}
+              <h6 className="fw-bold text-start">Features:</h6>
+              <ul className="text-muted mb-4 text-start" style={{ lineHeight: "1.9" }}>
+                {(plan.description || "")
+                  .split(",")
+                  .map((f, i) => (
+                    <li key={i}>✔ {f.trim()}</li>
+                  ))}
               </ul>
 
+              {/* Limits */}
+              <h6 className="fw-bold text-start mt-3">Usage Limits:</h6>
+              <ul className="text-muted mb-4 text-start">
+                <li>Desk Limit: {plan.deskLimit}</li>
+                <li>Employee Limit: {plan.employeeLimit}</li>
+                <li>Floor Limit: {plan.floorLimit}</li>
+                <li>Meeting Room Limit: {plan.meetingRoomLimit}</li>
+              </ul>
+
+            
+
+              {/* Button */}
               <button className="btn btn-primary w-100">
                 Choose Plan
               </button>
