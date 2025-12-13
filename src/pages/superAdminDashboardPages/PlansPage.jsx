@@ -1,7 +1,9 @@
-// src/pages/Plans/PlansPage.jsx
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchPlans } from "../../redux/slices/subscriptionSlice";
+import {
+  fetchPlans,
+  changePlanStatus,
+} from "../../redux/slices/subscriptionSlice";
 import AddPlanModal from "../../components/plans/AddPlanModal";
 import EditPlanModal from "../../components/plans/EditPlanModal";
 import DeleteConfirmModal from "../../components/plans/DeleteConfirmModal";
@@ -20,6 +22,10 @@ export default function PlansPage() {
     dispatch(fetchPlans());
   }, [dispatch]);
 
+  const toggleStatus = (id) => {
+    dispatch(changePlanStatus(id));
+  };
+
   return (
     <div>
       <h1 className="mb-4">Manage Plans</h1>
@@ -27,7 +33,10 @@ export default function PlansPage() {
       <div className="card shadow-sm mb-4">
         <div className="card-header d-flex justify-content-between align-items-center">
           Plans List
-          <button className="btn btn-primary" onClick={() => setShowAdd(true)}>
+          <button
+            className="btn btn-primary"
+            onClick={() => setShowAdd(true)}
+          >
             Add New Plan
           </button>
         </div>
@@ -36,7 +45,9 @@ export default function PlansPage() {
           {loading && <p>Loading...</p>}
           {error && <p className="text-danger">{error}</p>}
 
-          {!loading && plans?.length === 0 && <p>No plans available</p>}
+          {!loading && plans?.length === 0 && (
+            <p>No plans available</p>
+          )}
 
           {!loading && plans?.length > 0 && (
             <div className="table-responsive">
@@ -63,25 +74,46 @@ export default function PlansPage() {
                       <td>₹{plan.priceYearly}</td>
                       <td>{plan.description}</td>
                       <td>
-                        Desk: {plan.deskLimit}<br />
-                        Employee: {plan.employeeLimit}<br />
-                        Floor: {plan.floorLimit}<br />
+                        Desk: {plan.deskLimit}
+                        <br />
+                        Employee: {plan.employeeLimit}
+                        <br />
+                        Floor: {plan.floorLimit}
+                        <br />
                         Meeting: {plan.meetingRoomLimit}
                       </td>
                       <td>
                         {plan.isActive ? (
-                          <span className="badge bg-success">Active</span>
+                          <span className="badge bg-success">
+                            Active
+                          </span>
                         ) : (
-                          <span className="badge bg-secondary">Inactive</span>
+                          <span className="badge bg-secondary">
+                            Inactive
+                          </span>
                         )}
                       </td>
                       <td>
+                        <button
+                          className={`btn btn-sm me-2 ${
+                            plan.isActive
+                              ? "btn-secondary"
+                              : "btn-success"
+                          }`}
+                          onClick={() => toggleStatus(plan.id)}
+                        >
+                          {plan.isActive
+                            ? "Deactivate"
+                            : "Activate"}
+                        </button>
+
                         <button
                           className="btn btn-sm btn-warning me-2"
                           onClick={() => setEditPlan(plan)}
                         >
                           Edit
                         </button>
+
                         <button
                           className="btn btn-sm btn-danger"
                           onClick={() => setDeletePlan(plan)}
@@ -92,14 +124,15 @@ export default function PlansPage() {
                     </tr>
                   ))}
                 </tbody>
-
               </table>
             </div>
           )}
         </div>
       </div>
 
-      {showAdd && <AddPlanModal onClose={() => setShowAdd(false)} />}
+      {showAdd && (
+        <AddPlanModal onClose={() => setShowAdd(false)} />
+      )}
       {editPlan && (
         <EditPlanModal
           plan={editPlan}

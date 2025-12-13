@@ -47,3 +47,16 @@ export const deletePlanApi = async (id) => {
   console.log(`🟢 [DELETE] /Subscription/${id}`, response.data);
   return response;
 };
+
+/* ================= CHANGE STATUS ================= */
+
+export const changePlanStatusApi = async (id) => {
+  console.log(`🔵 [SUBSCRIPTION API] PATCH /Subscription/${id}/changeStatus`);
+
+  const response = await axiosClient.patch(
+    `/Subscription/${id}/changeStatus`
+  );
+
+  console.log("🟢 Status changed:", response.data);
+  return response;
+};

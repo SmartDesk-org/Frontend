@@ -4,6 +4,7 @@ import {
   createPlanApi,
   updatePlanApi,
   deletePlanApi,
+  changePlanStatusApi,
 } from "../api/subscriptionApi";
 
 /* ================= FETCH ================= */
@@ -29,8 +30,6 @@ export const createPlan = createAsyncThunk(
       const res = await createPlanApi(payload);
       return res.data.data;
     } catch (err) {
-      console.log(err.response?.data?.message);
-      
       return rejectWithValue(err.response?.data?.message || "Create failed");
     }
   }
@@ -43,7 +42,7 @@ export const updatePlan = createAsyncThunk(
   async ({ id, payload }, { rejectWithValue }) => {
     try {
       const res = await updatePlanApi(id, payload);
-      return res.data.data; // updated plan
+      return res.data.data;
     } catch (err) {
       return rejectWithValue(err.response?.data?.message || "Update failed");
     }
@@ -60,6 +59,22 @@ export const deletePlan = createAsyncThunk(
       return id;
     } catch (err) {
       return rejectWithValue(err.response?.data?.message || "Delete failed");
+    }
+  }
+);
+
+/* ================= CHANGE STATUS ================= */
+
+export const changePlanStatus = createAsyncThunk(
+  "subscription/changePlanStatus",
+  async (id, { rejectWithValue }) => {
+    try {
+      await changePlanStatusApi(id);
+      return id; // backend toggles, frontend flips
+    } catch (err) {
+      return rejectWithValue(
+        err.response?.data?.message || "Status change failed"
+      );
     }
   }
 );
@@ -95,21 +110,29 @@ const subscriptionSlice = createSlice({
         state.plans.push(action.payload);
       })
 
-      /* UPDATE (THIS WAS MISSING) */
+      /* UPDATE */
       .addCase(updatePlan.fulfilled, (state, action) => {
         const index = state.plans.findIndex(
           (p) => p.id === action.payload.id
         );
-        if (index !== -1) {
-          state.plans[index] = action.payload;
-        }
+        if (index !== -1) state.plans[index] = action.payload;
       })
 
-      /* DELETE (THIS WAS MISSING) */
+      /* DELETE */
       .addCase(deletePlan.fulfilled, (state, action) => {
         state.plans = state.plans.filter(
           (p) => p.id !== action.payload
         );
+      })
+
+      /* CHANGE STATUS ✅ */
+      .addCase(changePlanStatus.fulfilled, (state, action) => {
+        const plan = state.plans.find(
+          (p) => p.id === action.payload
+        );
+        if (plan) {
+          plan.isActive = !plan.isActive;
+        }
       });
   },
 });

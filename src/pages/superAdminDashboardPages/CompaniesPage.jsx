@@ -1,56 +1,80 @@
-// src/pages/Companies/CompaniesPage.jsx
-import React from 'react';
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchCompanies } from "../../redux/slices/companySlice";
 
 export default function CompaniesPage() {
-  const dummyCompanies = [
-    { id: 1, name: 'Acme Corp', status: 'Active', plan: 'Premium' },
-    { id: 2, name: 'Globex Inc.', status: 'Inactive', plan: 'Basic' },
-    { id: 3, name: 'Soylent Corp', status: 'Active', plan: 'Enterprise' },
-  ];
+  const dispatch = useDispatch();
+  const { companies, loading, error } = useSelector(
+    (state) => state.company
+  );
+
+  useEffect(() => {
+    dispatch(fetchCompanies());
+  }, [dispatch]);
 
   return (
     <div>
       <h1 className="mb-4">Client Companies</h1>
+
       <div className="card shadow-sm mb-4">
-        <div className="card-header d-flex justify-content-between align-items-center">
+        <div className="card-header">
           Companies List
-          <button className="btn btn-primary">Add New Company</button>
         </div>
+
         <div className="card-body">
-          <div className="table-responsive">
-            <table className="table table-striped table-hover">
-              <thead>
-                <tr>
-                  <th>ID</th>
-                  <th>Name</th>
-                  <th>Status</th>
-                  <th>Plan</th>
-                  <th>Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                {dummyCompanies.map((company) => (
-                  <tr key={company.id}>
-                    <td>{company.id}</td>
-                    <td>{company.name}</td>
-                    <td>
-                      <span
-                        className={`badge bg-${company.status === 'Active' ? 'success' : 'danger'}`}
-                      >
-                        {company.status}
-                      </span>
-                    </td>
-                    <td>{company.plan}</td>
-                    <td>
-                      <button className="btn btn-sm btn-info me-2">View</button>
-                      <button className="btn btn-sm btn-warning me-2">Edit</button>
-                      <button className="btn btn-sm btn-danger">Delete</button>
-                    </td>
+          {loading && <p>Loading...</p>}
+          {error && <p className="text-danger">{error}</p>}
+
+          {!loading && companies?.length === 0 && (
+            <p>No companies found</p>
+          )}
+
+          {!loading && companies?.length > 0 && (
+            <div className="table-responsive">
+              <table className="table table-striped table-hover align-middle">
+                <thead>
+                  <tr>
+                    <th>ID</th>
+                    <th>Company Name</th>
+                    <th>Address</th>
+                    <th>Status</th>
+                    <th>Created On</th>
+                    <th>Last Modified</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+                </thead>
+                <tbody>
+                  {companies.map((c) => (
+                    <tr key={c.companyId}>
+                      <td>{c.companyId}</td>
+                      <td className="fw-semibold">{c.name}</td>
+                      <td>{c.address}</td>
+                      <td>
+                        <span
+                          className={`badge ${
+                            c.isActive
+                              ? "bg-success"
+                              : "bg-secondary"
+                          }`}
+                        >
+                          {c.isActive ? "Active" : "Inactive"}
+                        </span>
+                      </td>
+                      <td>
+                        {c.createdAt
+                          ? new Date(c.createdAt).toLocaleString()
+                          : "-"}
+                      </td>
+                      <td>
+                        {c.modifiedAt
+                          ? new Date(c.modifiedAt).toLocaleString()
+                          : "-"}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
         </div>
       </div>
     </div>
