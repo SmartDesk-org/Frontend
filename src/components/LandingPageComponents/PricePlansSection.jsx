@@ -12,26 +12,27 @@ export default function PricePlansSection() {
 
   if (loading) return <p className="text-center">Loading plans...</p>;
   if (error) return <p className="text-center text-danger">{error}</p>;
-  if (!plans.length) return <p className="text-center">No plans available</p>;
+  if (!plans || !plans.length)
+    return <p className="text-center">No plans available</p>;
 
   return (
     <section className="py-5 px-3 bg-light">
       <div className="container text-center">
         <h3 className="fw-bold text-dark mb-4 fs-2">Pricing Plans</h3>
 
-        <div className="d-flex flex-column flex-md-row justify-content-center gap-4">
+        <div className="d-flex flex-column flex-md-row justify-content-center gap-4 flex-wrap">
           {plans.map((plan) => (
             <div
               key={plan.id}
-              className="bg-white rounded shadow p-4 flex-fill"
-              style={{ maxWidth: "380px", margin: "0 auto" }}
+              className="bg-white rounded shadow p-4"
+              style={{ maxWidth: "380px", width: "100%" }}
             >
-              {/* Title */}
+              {/* Plan Title */}
               <h4 className="fs-4 fw-semibold mb-3">
-                {plan.subscriptionPlanName}
+                {plan.subscriptionName}
               </h4>
 
-              {/* Prices */}
+              {/* Pricing */}
               <p className="fs-2 fw-bold mb-4">
                 ₹{plan.priceMonthly}/mo  
                 <br />
@@ -43,8 +44,8 @@ export default function PricePlansSection() {
               <ul className="text-muted mb-4 text-start" style={{ lineHeight: "1.9" }}>
                 {(plan.description || "")
                   .split(",")
-                  .map((f, i) => (
-                    <li key={i}>✔ {f.trim()}</li>
+                  .map((item, index) => (
+                    <li key={index}>✔ {item.trim()}</li>
                   ))}
               </ul>
 
@@ -56,8 +57,6 @@ export default function PricePlansSection() {
                 <li>Floor Limit: {plan.floorLimit}</li>
                 <li>Meeting Room Limit: {plan.meetingRoomLimit}</li>
               </ul>
-
-            
 
               {/* Button */}
               <button className="btn btn-primary w-100">

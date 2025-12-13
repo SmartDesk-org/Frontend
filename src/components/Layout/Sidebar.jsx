@@ -28,7 +28,7 @@ export default function Sidebar() {
         </li>
         <li>
           <NavLink
-            to="/plans"
+            to="plans"
             className={({ isActive }) =>
               isActive ? 'nav-link text-white active' : 'nav-link text-white'
             }

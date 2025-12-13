@@ -2,10 +2,13 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { login } from "../redux/slices/authSlice";
+import { useNavigate } from "react-router-dom";
 
 export default function LoginForm() {
   const dispatch = useDispatch();
   const { loading, error } = useSelector((state) => state.auth);
+
+  const navigate=useNavigate();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -22,7 +25,8 @@ export default function LoginForm() {
       .unwrap()
       .then((res) => {
         console.log("🟢 LOGIN SUCCESS:", res);
-        alert("Login successful");
+        if(res?.data?.role==1)
+        navigate('/superAdminDashBoard');
       })
       .catch((err) => {
         console.error("🔴 LOGIN FAILED:", err);

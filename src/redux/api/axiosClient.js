@@ -1,53 +1,67 @@
 import axios from "axios";
+import { getAuthToken, setAuthToken, clearAuthToken } from "../authToken";
 
 const axiosClient = axios.create({
   baseURL: import.meta.env.VITE_API_BASE_URL,
-  withCredentials: true,
+  withCredentials: true, // refresh token cookie
 });
 
-// ==========================
-// REQUEST LOGGING
-// ==========================
+/* ================= REQUEST ================= */
+
 axiosClient.interceptors.request.use(
   (config) => {
-    console.log("%c[API REQUEST]", "color: blue; font-weight: bold;");
-    console.log("URL:", config.baseURL + config.url);
-    console.log("Method:", config.method.toUpperCase());
-    console.log("Headers:", config.headers);
-    console.log("Data:", config.data);
+    const token = getAuthToken();
+
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+
     return config;
   },
-  (error) => {
-    console.error("[API REQUEST ERROR]", error);
-    return Promise.reject(error);
-  }
+  (error) => Promise.reject(error)
 );
 
-// ==========================
-// RESPONSE LOGGING
-// ==========================
-axiosClient.interceptors.response.use(
-  (response) => {
-    console.log("%c[API RESPONSE]", "color: green; font-weight: bold;");
-    console.log("URL:", response.config.url);
-    console.log("Status:", response.status);
-    console.log("Data:", response.data);
-    return response;
-  },
-  (error) => {
-    console.error("%c[API RESPONSE ERROR]", "color: red; font-weight: bold;");
+/* ================= RESPONSE (REFRESH) ================= */
 
-    if (error.response) {
-      // Backend error
-      console.error("URL:", error.response.config.url);
-      console.error("Status:", error.response.status);
-      console.error("Response:", error.response.data);
-    } else if (error.request) {
-      // No response received
-      console.error("NO RESPONSE RECEIVED:", error.request);
-    } else {
-      // Something else
-      console.error("ERROR:", error.message);
+axiosClient.interceptors.response.use(
+  (response) => response,
+  async (error) => {
+    const originalRequest = error.config;
+
+    // 🔴 If access token expired
+    if (error.response?.status === 401 && !originalRequest._retry) {
+      originalRequest._retry = true;
+
+      try {
+        console.log("🔄 Access token expired. Calling refresh...");
+
+        const refreshResponse = await axios.post(
+          `${import.meta.env.VITE_API_BASE_URL}/Auth/refresh`,
+          {},
+          { withCredentials: true }
+        );
+
+        const newAccessToken =
+          refreshResponse.data?.data?.accessToken;
+
+        if (!newAccessToken) {
+          throw new Error("No access token returned from refresh");
+        }
+
+        // 🔴 Store new token in memory
+        setAuthToken(newAccessToken);
+
+        // 🔴 Retry original request with new token
+        originalRequest.headers.Authorization =
+          `Bearer ${newAccessToken}`;
+
+        return axiosClient(originalRequest);
+      } catch (refreshError) {
+        console.error("❌ Refresh token failed");
+
+        clearAuthToken();
+        return Promise.reject(refreshError);
+      }
     }
 
     return Promise.reject(error);

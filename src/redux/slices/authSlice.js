@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { loginApi } from "../api/authApi";
+import { clearAuthToken, setAuthToken } from "../authToken";
 
 export const login = createAsyncThunk(
   "auth/login",
@@ -18,21 +19,33 @@ export const login = createAsyncThunk(
 const authSlice = createSlice({
   name: "auth",
   initialState: {
-    user: null, // optional
+    accessToken: null,   // 🔴 IN MEMORY
+    user: null,
     loading: false,
     error: null,
   },
-  reducers: {},
+  reducers: {
+    setAccessToken: (state, action) => {
+      state.accessToken = action.payload;
+    },
+    clearAuth: (state) => {
+      state.accessToken = null;
+      clearAuthToken();
+      state.user = null;
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(login.pending, (state) => {
         state.loading = true;
-        state.error = null;
       })
       .addCase(login.fulfilled, (state, action) => {
         state.loading = false;
-        state.error = null;
-        state.user = { email: action.meta.arg.email }; 
+        state.accessToken = action.payload.data.accessToken; // 🔴 STORE IN MEMORY
+        setAuthToken(action.payload.data.accessToken);
+        console.log("token stored "+state.accessToken);
+        
+        state.user = { email: action.meta.arg.email };
       })
       .addCase(login.rejected, (state, action) => {
         state.loading = false;
@@ -41,4 +54,6 @@ const authSlice = createSlice({
   },
 });
 
+export const { setAccessToken, clearAuth } = authSlice.actions;
 export default authSlice.reducer;
+
