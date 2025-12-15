@@ -15,7 +15,6 @@ export default function PricePlansSection() {
   if (loading) return <p className="text-center">Loading plans...</p>;
   if (error) return <p className="text-center text-danger">{error}</p>;
 
-  // ✅ FILTER ONLY ACTIVE PLANS
   const activePlans = plans?.filter((p) => p.isActive);
 
   if (!activePlans?.length)
@@ -42,9 +41,7 @@ export default function PricePlansSection() {
               <p className="fs-3 fw-bold">
                 ₹{plan.priceMonthly}/mo
                 <br />
-                <span className="fs-6">
-                  (₹{plan.priceYearly}/year)
-                </span>
+                <span className="fs-6">(₹{plan.priceYearly}/year)</span>
               </p>
 
               <ul className="text-start">
@@ -62,6 +59,17 @@ export default function PricePlansSection() {
             </div>
           ))}
         </div>
+
+        {/* ✅ Added text below plans */}
+        <p className="mt-4 text-muted">
+          Need a custom plan?{" "}
+          <a
+            className="nav-link text-dark text-primary text-decoration-underline"
+            href="#book-demo"
+          >
+            Contact the admins
+          </a>
+        </p>
       </div>
     </section>
   );

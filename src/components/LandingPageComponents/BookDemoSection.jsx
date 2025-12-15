@@ -1,75 +1,96 @@
-// src/components/BookDemoSection.jsx
-import React, { useState } from 'react';
-
+import React, { useState } from "react";
+import {submitClientMessage} from "../../redux/api/clientMessagesApi"
 export default function BookDemoSection() {
-  const [formData, setFormData] = useState({ name: '', email: '', comment: '' });
-  const [submitted, setSubmitted] = useState(false);
+  const [formData, setFormData] = useState({
+    email: "",
+    phoneNo: "",
+    comment: "",
+  });
 
-  const handleChange = e => {
-    setFormData(prev => ({ ...prev, [e.target.name]: e.target.value }));
+  const [submitted, setSubmitted] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+
+  const handleChange = (e) => {
+    setFormData((p) => ({ ...p, [e.target.name]: e.target.value }));
   };
 
-  const handleSubmit = e => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    setSubmitted(true);
+
+    try {
+      setLoading(true);
+      setError(null);
+
+     await submitClientMessage({
+      email: formData.email,
+      phoneNo: formData.phoneNo,
+      comment: formData.comment,
+    });
+
+      setSubmitted(true);
+    } catch {
+      setError("Failed to submit request");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
     <section className="py-5 px-3 bg-light">
       <div className="container d-flex justify-content-center">
         <div className="col-md-6 text-center">
-          <h3 className="fw-bold text-dark mb-4">Book a Demo</h3>
+          <h3 className="fw-bold mb-4">Book a Demo</h3>
 
           {!submitted ? (
             <form onSubmit={handleSubmit} className="text-start">
-
-              {/* Name */}
               <div className="mb-3">
-                <label className="form-label text-secondary">Name</label>
-                <input
-                  type="text"
-                  name="name"
-                  required
-                  value={formData.name}
-                  onChange={handleChange}
-                  className="form-control"
-                />
-              </div>
-
-              {/* Email */}
-              <div className="mb-3">
-                <label className="form-label text-secondary">Email</label>
+                <label className="form-label">Email</label>
                 <input
                   type="email"
                   name="email"
                   required
+                  className="form-control"
                   value={formData.email}
                   onChange={handleChange}
-                  className="form-control"
                 />
               </div>
 
-              {/* Comment */}
               <div className="mb-3">
-                <label className="form-label text-secondary">Comment</label>
+                <label className="form-label">Phone Number</label>
+                <input
+                  type="text"
+                  name="phoneNo"
+                  required
+                  className="form-control"
+                  value={formData.phoneNo}
+                  onChange={handleChange}
+                />
+              </div>
+
+              <div className="mb-3">
+                <label className="form-label">Comment</label>
                 <textarea
                   name="comment"
                   rows="4"
+                  className="form-control"
                   value={formData.comment}
                   onChange={handleChange}
-                  className="form-control"
-                  placeholder="Write your message here..."
                 />
               </div>
 
-              {/* Submit Button */}
-              <button type="submit" className="btn btn-primary w-100">
-                Submit
+              {error && <p className="text-danger">{error}</p>}
+
+              <button
+                className="btn btn-primary w-100"
+                disabled={loading}
+              >
+                {loading ? "Submitting..." : "Submit"}
               </button>
             </form>
           ) : (
-            <p className="text-success fw-semibold mt-3">
-              Thank you for your request! We will contact you soon.
+            <p className="text-success fw-semibold">
+              Thank you! We will contact you soon.
             </p>
           )}
         </div>

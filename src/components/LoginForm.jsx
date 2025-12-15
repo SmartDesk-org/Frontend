@@ -40,7 +40,7 @@ export default function LoginForm() {
   };
 
   const handleForgotPassword = () => {
-    alert("Forgot password clicked");
+   navigate("/forgot-password");
   };
 
   return (

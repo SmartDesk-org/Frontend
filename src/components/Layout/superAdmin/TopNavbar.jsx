@@ -1,8 +1,8 @@
 // src/components/Layout/TopNavbar.jsx
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import axiosClient from "../../redux/api/axiosClient";
-import { clearAuthToken } from "../../redux/authToken";
+import axiosClient from "../../../redux/api/axiosClient";
+import { clearAuthToken } from "../../../redux/authToken";
 
 export default function TopNavbar() {
   const navigate = useNavigate();

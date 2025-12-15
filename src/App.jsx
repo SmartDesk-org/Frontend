@@ -9,7 +9,7 @@ import PurchaseSubscriptionPage from "./pages/PurchaseSubscriptionPage";
 import PaymentPage from "./pages/PaymentPage";
 
 // Super Admin
-import SuperAdminDashboardLayout from "./components/Layout/SuperAdminDashboardLayout";
+import SuperAdminDashboardLayout from "./components/Layout/superAdmin/SuperAdminDashboardLayout";
 import CompaniesPage from "./pages/superAdminDashboardPages/CompaniesPage";
 import PlansPage from "./pages/superAdminDashboardPages/PlansPage";
 import MessagesPage from "./pages/superAdminDashboardPages/MessagesPage";
@@ -23,6 +23,8 @@ import EmployeesPage from "./pages/companyAdminDashboardPages/EmployeePage";
 import DesksPage from "./pages/companyAdminDashboardPages/DesksPage";
 import MeetingRoomsPage from "./pages/companyAdminDashboardPages/MeetingRoomsPage";
 import CompanySubPage from "./pages/companyAdminDashboardPages/CompanySubPage";
+import ForgotPassword from "./components/ForgotPassword";
+import ResetPassword from "./components/ResetPassword";
 
 function App() {
   return (
@@ -32,6 +34,8 @@ function App() {
       <Route path="/login" element={<LoginPage />} />
       <Route path="/purchase" element={<PurchaseSubscriptionPage />} />
       <Route path="/payment" element={<PaymentPage />} />
+      <Route path="/forgot-password" element={<ForgotPassword/>}/>
+      <Route path="/reset-password" element={<ResetPassword/>}/>
 
       {/* ================= SUPER ADMIN ================= */}
       <Route

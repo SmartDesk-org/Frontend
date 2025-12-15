@@ -4,6 +4,7 @@ import authReducer from './slices/authSlice';
 import subscriptionReducer from './slices/subscriptionSlice';
 import purchaseSubscriptionReducer from "./slices/purchaseSubscriptionSlice";
 import companyReducer from './slices/companySlice';
+import clientMessagesReducer from './slices/clientMessagesSlice';
 
 import floorReducer from './slices/floorSlice';
 import employeeReducer from './slices/employeeSlice' ;
@@ -16,6 +17,7 @@ const store = configureStore({
     subscription:subscriptionReducer,
     purchase:purchaseSubscriptionReducer,
     company:companyReducer,
+    clientMessages:clientMessagesReducer,
 
     floor: floorReducer,
     employees: employeeReducer,
