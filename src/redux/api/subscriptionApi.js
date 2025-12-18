@@ -60,3 +60,15 @@ export const changePlanStatusApi = async (id) => {
   console.log("🟢 Status changed:", response.data);
   return response;
 };
+
+
+/* ================= fetch plan type  ================= */
+
+export const fetchPlanTypesApi= async ()=>{
+  console.log(`🔵 [SUBSCRIPTION API] GET /Subscription/SubscriptionTypes`);
+
+  const response=await axiosClient.get(`/Subscription/SubscriptionTypes`);
+  console.log("🟢 plans fetched  :", response.data);
+
+  return response.data;
+}

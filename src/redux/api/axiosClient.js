@@ -29,10 +29,13 @@ axiosClient.interceptors.response.use(
 
       try {
         // 🔴 MUST USE axiosClient (proxy)
+        console.log("calling refresh");
+        
         const refreshResponse = await axiosClient.post("/Auth/refresh");
-
+        console.log("rfresheed new token"+ refreshResponse.data);
+        
         const newAccessToken =
-          refreshResponse.data?.data?.accessToken;
+          refreshResponse.data;
 
         if (!newAccessToken) throw new Error("No access token");
 

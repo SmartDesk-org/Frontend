@@ -10,9 +10,7 @@ import DeleteConfirmModal from "../../components/plans/DeleteConfirmModal";
 
 export default function PlansPage() {
   const dispatch = useDispatch();
-  const { plans, loading, error } = useSelector(
-    (state) => state.subscription
-  );
+  const { plans, loading, error } = useSelector((state) => state.subscription);
 
   const [showAdd, setShowAdd] = useState(false);
   const [editPlan, setEditPlan] = useState(null);
@@ -33,10 +31,7 @@ export default function PlansPage() {
       <div className="card shadow-sm mb-4">
         <div className="card-header d-flex justify-content-between align-items-center">
           Plans List
-          <button
-            className="btn btn-primary"
-            onClick={() => setShowAdd(true)}
-          >
+          <button className="btn btn-primary" onClick={() => setShowAdd(true)}>
             Add New Plan
           </button>
         </div>
@@ -45,9 +40,7 @@ export default function PlansPage() {
           {loading && <p>Loading...</p>}
           {error && <p className="text-danger">{error}</p>}
 
-          {!loading && plans?.length === 0 && (
-            <p>No plans available</p>
-          )}
+          {!loading && plans?.length === 0 && <p>No plans available</p>}
 
           {!loading && plans?.length > 0 && (
             <div className="table-responsive">
@@ -55,7 +48,8 @@ export default function PlansPage() {
                 <thead>
                   <tr>
                     <th>ID</th>
-                    <th>Name</th>
+                    <th>Plan Name</th>
+                    <th>Type</th>
                     <th>Monthly</th>
                     <th>Yearly</th>
                     <th>Description</th>
@@ -69,10 +63,22 @@ export default function PlansPage() {
                   {plans.map((plan) => (
                     <tr key={plan.id}>
                       <td>{plan.id}</td>
+
+                      {/* ✅ Subscription Name */}
                       <td>{plan.subscriptionName}</td>
+
+                      {/* ✅ Type Name */}
+                      <td>
+                        <span className="badge bg-info text-dark">
+                          {plan.typeName}
+                        </span>
+                      </td>
+
                       <td>₹{plan.priceMonthly}</td>
                       <td>₹{plan.priceYearly}</td>
+
                       <td>{plan.description}</td>
+
                       <td>
                         Desk: {plan.deskLimit}
                         <br />
@@ -82,29 +88,23 @@ export default function PlansPage() {
                         <br />
                         Meeting: {plan.meetingRoomLimit}
                       </td>
+
                       <td>
                         {plan.isActive ? (
-                          <span className="badge bg-success">
-                            Active
-                          </span>
+                          <span className="badge bg-success">Active</span>
                         ) : (
-                          <span className="badge bg-secondary">
-                            Inactive
-                          </span>
+                          <span className="badge bg-secondary">Inactive</span>
                         )}
                       </td>
+
                       <td>
                         <button
                           className={`btn btn-sm me-2 ${
-                            plan.isActive
-                              ? "btn-secondary"
-                              : "btn-success"
+                            plan.isActive ? "btn-secondary" : "btn-success"
                           }`}
                           onClick={() => toggleStatus(plan.id)}
                         >
-                          {plan.isActive
-                            ? "Deactivate"
-                            : "Activate"}
+                          {plan.isActive ? "Deactivate" : "Activate"}
                         </button>
 
                         <button
@@ -130,14 +130,9 @@ export default function PlansPage() {
         </div>
       </div>
 
-      {showAdd && (
-        <AddPlanModal onClose={() => setShowAdd(false)} />
-      )}
+      {showAdd && <AddPlanModal onClose={() => setShowAdd(false)} />}
       {editPlan && (
-        <EditPlanModal
-          plan={editPlan}
-          onClose={() => setEditPlan(null)}
-        />
+        <EditPlanModal plan={editPlan} onClose={() => setEditPlan(null)} />
       )}
       {deletePlan && (
         <DeleteConfirmModal

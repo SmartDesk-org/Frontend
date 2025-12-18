@@ -15,7 +15,7 @@ export default function PricePlansSection() {
   if (loading) return <p className="text-center">Loading plans...</p>;
   if (error) return <p className="text-center text-danger">{error}</p>;
 
-  const activePlans = plans?.filter((p) => p.isActive);
+  const activePlans = plans?.filter((p) => p.isActive && p.type=="Basic");
 
   if (!activePlans?.length)
     return <p className="text-center">No plans available</p>;

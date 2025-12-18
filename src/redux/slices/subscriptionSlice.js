@@ -5,6 +5,7 @@ import {
   updatePlanApi,
   deletePlanApi,
   changePlanStatusApi,
+  fetchPlanTypesApi
 } from "../api/subscriptionApi";
 
 /* ================= FETCH ================= */
@@ -79,6 +80,23 @@ export const changePlanStatus = createAsyncThunk(
   }
 );
 
+/* ================= fetch plan types  ================= */
+
+export const fetchPlanTypes = createAsyncThunk(
+  "subscription/fetchPlanTypes",
+  async (_, { rejectWithValue }) => {
+    try {
+      const res = await fetchPlanTypesApi();
+      return res.data; // ✅ NO .data
+    } catch (err) {
+      return rejectWithValue(
+        err.response?.data?.message || "Failed fetching plan types"
+      );
+    }
+  }
+);
+
+
 /* ================= SLICE ================= */
 
 const subscriptionSlice = createSlice({
@@ -87,6 +105,7 @@ const subscriptionSlice = createSlice({
     plans: [],
     loading: false,
     error: null,
+    types:[]
   },
   reducers: {},
   extraReducers: (builder) => {
@@ -133,7 +152,21 @@ const subscriptionSlice = createSlice({
         if (plan) {
           plan.isActive = !plan.isActive;
         }
+      })
+            /* FETCH PLAN TYPES */
+      .addCase(fetchPlanTypes.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchPlanTypes.fulfilled, (state, action) => {
+        state.loading = false;
+        state.types = action.payload;
+      })
+      .addCase(fetchPlanTypes.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
       });
+
   },
 });
 

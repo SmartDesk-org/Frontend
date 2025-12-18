@@ -25,9 +25,9 @@ export default function LoginForm() {
       .unwrap()
       .then((res) => {
         console.log("🟢 LOGIN SUCCESS:", res);
-        if(res?.data?.role==1)
+        if(res?.role==1)
         navigate('/super-admin');
-        else if(res?.data?.role==2)
+        else if(res?.role==2)
           navigate("/company-admin");
       })
       .catch((err) => {

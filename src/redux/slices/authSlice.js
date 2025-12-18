@@ -85,8 +85,8 @@ const authSlice = createSlice({
       })
       .addCase(login.fulfilled, (state, action) => {
         state.loading = false;
-        state.accessToken = action.payload.data.accessToken;
-        setAuthToken(action.payload.data.accessToken);
+        state.accessToken = action.payload.accessToken;
+        setAuthToken(action.payload.accessToken);
 
         console.log("token stored " + state.accessToken);
 
