@@ -15,6 +15,8 @@ export const fetchPlans = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       const res = await getAllPlansApi();
+      console.log("from slice fetch plans ",res.data.data);
+      
       return res.data.data;
     } catch (err) {
       return rejectWithValue(err.response?.data?.message || "Fetch failed");

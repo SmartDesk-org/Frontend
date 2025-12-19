@@ -15,10 +15,11 @@ export default function PricePlansSection() {
   if (loading) return <p className="text-center">Loading plans...</p>;
   if (error) return <p className="text-center text-danger">{error}</p>;
 
-  const activePlans = plans?.filter((p) => p.isActive && p.type=="Basic");
+  const activePlans = plans?.filter((p) => p.isActive && p.typeName=="Basic");
+console.log("activePlans ",activePlans);
 
   if (!activePlans?.length)
-    return <p className="text-center">No plans available</p>;
+    return <p className="text-center">No plans available, Please contact admins </p>;
 
   const choosePlan = (plan) => {
     navigate("/purchase", { state: { selectedPlan: plan } });

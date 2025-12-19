@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -14,16 +14,14 @@ export default function PurchaseSubscriptionPage() {
   const navigate = useNavigate();
 
   const purchaseState = useSelector((state) => state.purchase);
-  console.log("🟦 [COMPONENT] purchaseState:", purchaseState);
-
   const { form, loading, error, success, companyId } = purchaseState;
+
+  // ✅ New local UX state
+  const [isYearly, setIsYearly] = useState(true);
 
   useEffect(() => {
     if (success && companyId) {
-      console.log("🟩 Redirecting to payment page");
-      navigate("/payment", {
-        state: { companyId },
-      });
+      navigate("/payment", { state: { companyId } });
     }
   }, [success, companyId, navigate]);
 
@@ -38,11 +36,29 @@ export default function PurchaseSubscriptionPage() {
     );
   };
 
-  const totalAmount =
-    Number(form.years) * plan.priceYearly +
-    Number(form.months) * plan.priceMonthly;
+  // ✅ Amount calculation
+  const totalAmount = isYearly
+    ? plan.priceYearly
+    : Number(form.months) * plan.priceMonthly;
+
+  // ✅ Expiration calculation
+  const startDate = new Date();
+  const expirationDate = new Date(startDate);
+
+  if (isYearly) {
+    expirationDate.setFullYear(startDate.getFullYear() + 1);
+  } else {
+    expirationDate.setMonth(
+      startDate.getMonth() + Number(form.months)
+    );
+  }
 
   const submitCompany = () => {
+    if (!isYearly && Number(form.months) < 1) {
+      alert("Please select at least 1 month");
+      return;
+    }
+
     const payload = {
       name: form.name,
       address: form.address,
@@ -50,13 +66,12 @@ export default function PurchaseSubscriptionPage() {
       passWord: form.password,
       confirmPassword: form.password,
 
-      // ✅ MATCH DTO
+      // ✅ Safe & clear
       selectedSubscriptionId: plan.id,
-      expirationMonth: Number(form.months),
-      expirationYear: Number(form.years),
+      expirationMonth: isYearly ? 0 : Number(form.months),
+      expirationYear: isYearly ? 1 : 0,
     };
 
-    console.log("🟦 [COMPONENT] Submitting payload:", payload);
     dispatch(submitPurchase(payload));
   };
 
@@ -64,7 +79,7 @@ export default function PurchaseSubscriptionPage() {
     <div className="container py-5">
       <h3 className="fw-bold mb-4">Purchase Subscription</h3>
 
-      
+      {/* Company Details */}
       <div className="card p-4 mb-4">
         <h5>Company Details</h5>
 
@@ -111,8 +126,8 @@ export default function PurchaseSubscriptionPage() {
         />
       </div>
 
+      {/* Selected Plan */}
       <div className="card p-4 mb-4">
-        <div className="card p-3 mb-4">
         <h5>Selected Plan</h5>
         <p className="fw-bold">
           {plan.subscriptionName} – ₹{plan.priceMonthly}/mo | ₹
@@ -120,37 +135,63 @@ export default function PurchaseSubscriptionPage() {
         </p>
       </div>
 
+      {/* Subscription Duration */}
+      <div className="card p-4 mb-4">
         <h5>Subscription Duration</h5>
-        <div className="row">
 
-          <div className="col">
-            <input
-              type="number"
-              min="0"
-              className="form-control"
-              placeholder="Years"
-              name="years"
-              value={form.years}
-              onChange={handleChange}
-            />
-          </div>
-          <div className="col">
-            <input
-              type="number"
-              min="0"
-              className="form-control"
-              placeholder="Months"
-              name="months"
-              value={form.months}
-              onChange={handleChange}
-            />
-          </div>
+        {/* Yearly toggle */}
+        <div className="form-check mb-3">
+          <input
+            className="form-check-input"
+            type="checkbox"
+            id="yearly"
+            checked={isYearly}
+            onChange={(e) => {
+              setIsYearly(e.target.checked);
+              if (e.target.checked) {
+                dispatch(
+                  updatePurchaseField({
+                    name: "months",
+                    value: 1,
+                  })
+                );
+              }
+            }}
+          />
+          <label className="form-check-label fw-bold" htmlFor="yearly">
+            Whole Year (12 months)
+          </label>
+        </div>
+
+        {/* Month dropdown */}
+        <div style={{ opacity: isYearly ? 0.4 : 1 }}>
+          <label className="form-label">Select Months (1–11)</label>
+          <select
+            className="form-select"
+            disabled={isYearly}
+            name="months"
+            value={form.months}
+            onChange={handleChange}
+          >
+            <option value={0}>Select months</option>
+            {[...Array(11)].map((_, i) => (
+              <option key={i + 1} value={i + 1}>
+                {i + 1} month{i + 1 > 1 ? "s" : ""}
+              </option>
+            ))}
+          </select>
         </div>
       </div>
 
+      {/* Summary */}
       <div className="card p-4 mb-4">
-        <h5>Total Amount</h5>
-        <p className="fs-4 fw-bold">₹{totalAmount.toFixed(2)}</p>
+        <h5>Summary</h5>
+        <p className="fs-4 fw-bold">
+          Amount to Pay: ₹{totalAmount.toFixed(2)}
+        </p>
+        <p className="text-muted">
+          Expires on: {expirationDate.toDateString()}
+        </p>
       </div>
 
       {error && <p className="text-danger">{error}</p>}

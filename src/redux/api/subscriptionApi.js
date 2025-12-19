@@ -68,7 +68,7 @@ export const fetchPlanTypesApi= async ()=>{
   console.log(`🔵 [SUBSCRIPTION API] GET /Subscription/SubscriptionTypes`);
 
   const response=await axiosClient.get(`/Subscription/SubscriptionTypes`);
-  console.log("🟢 plans fetched  :", response.data);
+  console.log("🟢 types fetched  :", response.data);
 
   return response.data;
 }
