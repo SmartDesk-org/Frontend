@@ -54,26 +54,36 @@ export default function PurchaseSubscriptionPage() {
   }
 
   const submitCompany = () => {
-    if (!isYearly && Number(form.months) < 1) {
-      alert("Please select at least 1 month");
-      return;
-    }
+  if (!form.password || !form.confirmPassword) {
+    alert("Password and Confirm Password are required");
+    return;
+  }
 
-    const payload = {
-      name: form.name,
-      address: form.address,
-      email: form.email,
-      passWord: form.password,
-      confirmPassword: form.password,
+  if (form.password !== form.confirmPassword) {
+    alert("Password and Confirm Password do not match");
+    return;
+  }
 
-      // ✅ Safe & clear
-      selectedSubscriptionId: plan.id,
-      expirationMonth: isYearly ? 0 : Number(form.months),
-      expirationYear: isYearly ? 1 : 0,
-    };
+  if (!isYearly && Number(form.months) < 1) {
+    alert("Please select at least 1 month");
+    return;
+  }
 
-    dispatch(submitPurchase(payload));
+  const payload = {
+    name: form.name,
+    address: form.address,
+    email: form.email,
+    passWord: form.password,
+    confirmPassword: form.confirmPassword,
+
+    selectedSubscriptionId: plan.id,
+    expirationMonth: isYearly ? 0 : Number(form.months),
+    expirationYear: isYearly ? 1 : 0,
   };
+
+  dispatch(submitPurchase(payload));
+};
+
 
   return (
     <div className="container py-5">
