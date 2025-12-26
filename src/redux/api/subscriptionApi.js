@@ -72,3 +72,4 @@ export const fetchPlanTypesApi= async ()=>{
 
   return response.data;
 }
+

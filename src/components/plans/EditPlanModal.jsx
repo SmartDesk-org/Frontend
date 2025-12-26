@@ -1,21 +1,62 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { fetchPlans } from "../../redux/slices/subscriptionSlice";
 import { updatePlanApi } from "../../redux/api/subscriptionApi";
 
 export default function EditPlanModal({ plan, onClose }) {
   const dispatch = useDispatch();
-  const [form, setForm] = useState({ ...plan });
 
+  // ✅ DTO-aligned state (minimal explicit mapping)
+  const [form, setForm] = useState({
+    subscriptionName: plan.subscriptionName,
+    maxEmployees: plan.employeeLimit,
+    maxFloors: plan.floorLimit,
+    maxDesks: plan.deskLimit,
+    maxMeetingRooms: plan.meetingRoomLimit,
+    priceMonthly: plan.priceMonthly,
+    priceYearly: plan.priceYearly,
+    description: plan.description,
+    typeId: plan.typeId
+  });
+
+  // 🔍 Log initial state
+  useEffect(() => {
+    console.log("🟡 EditPlanModal opened with plan:", plan);
+    console.log("🟡 Initial form state:", form);
+  }, []);
+
+  // ✅ Numeric safety
   const onChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
+    const { name, value, type } = e.target;
+
+    console.log("✏️ Field changed:", {
+      field: name,
+      value: type === "number" ? Number(value) : value
+    });
+
+    setForm({
+      ...form,
+      [name]: type === "number" ? Number(value) : value
+    });
   };
 
   const onSubmit = async (e) => {
     e.preventDefault();
-    await updatePlanApi(form.id, form);
-    await dispatch(fetchPlans()).unwrap();
-    onClose();
+
+    console.log("🚀 Submitting update for planId:", plan.id);
+    console.log("📦 Payload sent to API:", form);
+
+    try {
+      await updatePlanApi(plan.id, form);
+      console.log("✅ Plan updated successfully");
+
+      await dispatch(fetchPlans()).unwrap();
+      console.log("🔄 Plans list refreshed");
+
+      onClose();
+    } catch (err) {
+      console.error("❌ Failed to update plan:", err);
+    }
   };
 
   return (
@@ -70,8 +111,8 @@ export default function EditPlanModal({ plan, onClose }) {
                   <input
                     type="number"
                     className="form-control"
-                    name="deskLimit"
-                    value={form.deskLimit}
+                    name="maxDesks"
+                    value={form.maxDesks}
                     onChange={onChange}
                   />
                 </div>
@@ -81,8 +122,8 @@ export default function EditPlanModal({ plan, onClose }) {
                   <input
                     type="number"
                     className="form-control"
-                    name="employeeLimit"
-                    value={form.employeeLimit}
+                    name="maxEmployees"
+                    value={form.maxEmployees}
                     onChange={onChange}
                   />
                 </div>
@@ -92,8 +133,8 @@ export default function EditPlanModal({ plan, onClose }) {
                   <input
                     type="number"
                     className="form-control"
-                    name="floorLimit"
-                    value={form.floorLimit}
+                    name="maxFloors"
+                    value={form.maxFloors}
                     onChange={onChange}
                   />
                 </div>
@@ -103,8 +144,8 @@ export default function EditPlanModal({ plan, onClose }) {
                   <input
                     type="number"
                     className="form-control"
-                    name="meetingRoomLimit"
-                    value={form.meetingRoomLimit}
+                    name="maxMeetingRooms"
+                    value={form.maxMeetingRooms}
                     onChange={onChange}
                   />
                 </div>
@@ -120,11 +161,18 @@ export default function EditPlanModal({ plan, onClose }) {
                   />
                 </div>
 
+                {/* Required for backend */}
+                <input type="hidden" name="typeId" value={form.typeId} />
+
               </div>
             </div>
 
             <div className="modal-footer">
-              <button type="button" className="btn btn-secondary" onClick={onClose}>
+              <button
+                type="button"
+                className="btn btn-secondary"
+                onClick={onClose}
+              >
                 Cancel
               </button>
               <button type="submit" className="btn btn-warning">

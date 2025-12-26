@@ -15,6 +15,7 @@ import PlansPage from "./pages/superAdminDashboardPages/PlansPage";
 import MessagesPage from "./pages/superAdminDashboardPages/MessagesPage";
 import AnnouncementsPage from "./pages/superAdminDashboardPages/AnnouncementsPage";
 import SuperAdminsPage from "./pages/superAdminDashboardPages/SuperAdminsPage";
+import SuperFeedbacksPage from "./pages/superAdminDashboardPages/FeedbacksPage"
 
 // Company Admin
 import CompanyAdminDashboardLayout from "./components/Layout/companyAdmin/CompanyAdminDashboardLayout";
@@ -25,6 +26,7 @@ import MeetingRoomsPage from "./pages/companyAdminDashboardPages/MeetingRoomsPag
 import CompanySubPage from "./pages/companyAdminDashboardPages/CompanySubPage";
 import ForgotPassword from "./components/ForgotPassword";
 import ResetPassword from "./components/ResetPassword";
+import CompanyFeedbackpage from './pages/companyAdminDashboardPages/FeedbacksPage'
 
 function App() {
   return (
@@ -48,6 +50,8 @@ function App() {
         <Route path="messages" element={<MessagesPage />} />
         <Route path="announcements" element={<AnnouncementsPage />} />
         <Route path="superadmins" element={<SuperAdminsPage />} />
+        <Route path="feedbacks" element={<SuperFeedbacksPage />} />
+
       </Route>
 
       {/* ================= COMPANY ADMIN ================= */}
@@ -60,6 +64,8 @@ function App() {
         <Route path="desks" element={<DesksPage />} />
         <Route path="rooms" element={<MeetingRoomsPage />} />
         <Route path="subscription" element={<CompanySubPage />} />
+        <Route path="feedbacks" element={<CompanyFeedbackpage />} />
+
       </Route>
     </Routes>
   );

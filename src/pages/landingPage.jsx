@@ -3,7 +3,7 @@ import React from 'react';
 import Navbar from '../components/LandingPageComponents/Navbar';
 import HomeSection from '../components/LandingPageComponents/HomeSection';
 import PricePlansSection from "../components/LandingPageComponents/PricePlansSection";
-import CaseStudiesSection from '../components/LandingPageComponents/CaseStudiesSection';
+import FeedbackSection from '../components/LandingPageComponents/FeedbackSection';
 import BookDemoSection from '../components/LandingPageComponents/BookDemoSection';
 
 export default function LandingPage() {
@@ -23,7 +23,7 @@ export default function LandingPage() {
           <PricePlansSection />
         </section>
         <section id="case-studies" className="py-5">
-          <CaseStudiesSection />
+          <FeedbackSection />
         </section>
         <section id="book-demo" className="py-5 bg-light">
           <BookDemoSection />

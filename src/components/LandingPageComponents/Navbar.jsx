@@ -35,7 +35,7 @@ export default function Navbar() {
             </li>
             <li className="nav-item">
               <a className="nav-link text-dark" href="#case-studies">
-                Case Studies
+                Feed Backs 
               </a>
             </li>
             <li className="nav-item">

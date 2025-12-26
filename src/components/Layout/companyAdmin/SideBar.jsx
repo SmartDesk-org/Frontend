@@ -25,6 +25,11 @@ export default function Sidebar() {
       <NavLink className="d-block mb-2" to="/company-admin/subscription">
         Subscription
       </NavLink>
+
+      {/* ✅ NEW */}
+      <NavLink className="d-block mb-2" to="/company-admin/feedbacks">
+        Feedbacks
+      </NavLink>
     </div>
   );
 }

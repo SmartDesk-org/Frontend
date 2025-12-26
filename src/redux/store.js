@@ -11,6 +11,8 @@ import employeeReducer from './slices/employeeSlice' ;
 import resourceReducer from './slices/resourceSlice';
 import compSubReducer from './slices/companySubSlice';
 
+import feedbackReducer from './slices/feedbackSlice';
+
 const store = configureStore({
   reducer: {
     auth: authReducer,
@@ -23,6 +25,8 @@ const store = configureStore({
     employees: employeeReducer,
     resources: resourceReducer,
     compSub: compSubReducer,
+
+    feedback:feedbackReducer
   },
 });
 
