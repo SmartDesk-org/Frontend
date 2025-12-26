@@ -2,11 +2,9 @@ import axios from "axios";
 import { getAuthToken, setAuthToken, clearAuthToken } from "../authToken";
 
 const axiosClient = axios.create({
-  baseURL: "/api",          // 🔴 USE PROXY
+  baseURL: "/api",
   withCredentials: true
 });
-
-/* ================= REQUEST ================= */
 axiosClient.interceptors.request.use(
   (config) => {
     const token = getAuthToken();
@@ -17,8 +15,6 @@ axiosClient.interceptors.request.use(
   },
   (error) => Promise.reject(error)
 );
-
-/* ================= RESPONSE (REFRESH) ================= */
 axiosClient.interceptors.response.use(
   (response) => response,
   async (error) => {
