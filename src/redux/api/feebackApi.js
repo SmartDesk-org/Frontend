@@ -24,11 +24,11 @@ export const getPublishedFeedbacksApi = async () => {
 
 /* ================= GET FEEDBACKS BY COMPANY (COMPANY ADMIN) ================= */
 
-export const getFeedbacksByCompanyApi = async (companyId) => {
-  console.log("🔵 [FEEDBACK API] GET /Feedback/{companyId}/get-all");
+export const getFeedbacksByCompanyApi = async () => {
+  console.log("🔵 [FEEDBACK API] GET /Feedback/GetAllForCompany");
 
   const res = await axiosClient.get(
-    `/Feedback/${companyId}/get-all`
+    `/Feedback/GetAllForCompany`
   );
 
   console.log("🟢 Company feedbacks fetched:", res.data);

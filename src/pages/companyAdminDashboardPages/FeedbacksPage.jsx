@@ -6,15 +6,12 @@ import AddFeedbackModal from "../../components/companyAdmin/AddFeedbackModal";
 export default function FeedbacksPage() {
   const dispatch = useDispatch();
   const { list, loading, error } = useSelector((s) => s.feedback);
-  const companyId = useSelector((s) => s.auth.user?.companyId);
 
   const [showModal, setShowModal] = useState(false);
 
   useEffect(() => {
-    if (companyId) {
-      dispatch(fetchFeedbacksByCompany(companyId));
-    }
-  }, [dispatch, companyId]);
+      dispatch(fetchFeedbacksByCompany());
+  }, [dispatch]);
 
   const handleAdd = async (payload) => {
     await dispatch(addFeedback(payload));

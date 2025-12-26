@@ -93,9 +93,9 @@ export const deleteFeedback = createAsyncThunk(
 
 export const fetchFeedbacksByCompany = createAsyncThunk(
   "feedback/fetchByCompany",
-  async (companyId, { rejectWithValue }) => {
+  async (_, { rejectWithValue }) => {
     try {
-      const res = await getFeedbacksByCompanyApi(companyId);
+      const res = await getFeedbacksByCompanyApi();
       return res.data.data;
     } catch (err) {
       return rejectWithValue(
