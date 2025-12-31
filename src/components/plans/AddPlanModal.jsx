@@ -8,10 +8,10 @@ import {
 
 const initialState = {
   subscriptionName: "",
-  employeeLimit: 0,
-  floorLimit: 0,
-  deskLimit: 0,
-  meetingRoomLimit: 0,
+  maxEmployees: 0,
+  maxFloors: 0,
+  maxDesks: 0,
+  maxMeetingRooms: 0,
   priceMonthly: 0,
   priceYearly: 0,
   description: "",
@@ -43,10 +43,10 @@ export default function AddPlanModal({ onClose }) {
 
     const payload = {
       subscriptionName: form.subscriptionName,
-      employeeLimit: Number(form.maxEmployees),
-      floorLimit: Number(form.maxFloors),
-      deskLimit: Number(form.maxDesks),
-      meetingRoomLimit: Number(form.maxMeetingRooms),
+      maxEmployees: Number(form.maxEmployees),
+      maxFloors: Number(form.maxFloors),
+      maxDesks: Number(form.maxDesks),
+      maxMeetingRooms: Number(form.maxMeetingRooms),
       priceMonthly: Number(form.priceMonthly),
       priceYearly: Number(form.priceYearly),
       description: form.description,

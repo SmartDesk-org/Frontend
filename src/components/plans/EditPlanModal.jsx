@@ -9,10 +9,10 @@ export default function EditPlanModal({ plan, onClose }) {
   // ✅ DTO-aligned state (minimal explicit mapping)
   const [form, setForm] = useState({
     subscriptionName: plan.subscriptionName,
-    maxEmployees: plan.employeeLimit,
-    maxFloors: plan.floorLimit,
-    maxDesks: plan.deskLimit,
-    maxMeetingRooms: plan.meetingRoomLimit,
+    maxEmployees: plan.maxEmployees,
+    maxFloors: plan.maxFloors,
+    maxDesks: plan.maxDesks,
+    maxMeetingRooms: plan.maxMeetingRooms,
     priceMonthly: plan.priceMonthly,
     priceYearly: plan.priceYearly,
     description: plan.description,

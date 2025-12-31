@@ -80,13 +80,13 @@ export default function PlansPage() {
                       <td>{plan.description}</td>
 
                       <td>
-                        Desk: {plan.deskLimit}
+                        Desk: {plan.maxDesks}
                         <br />
-                        Employee: {plan.employeeLimit}
+                        Employee: {plan.maxEmployees}
                         <br />
-                        Floor: {plan.floorLimit}
+                        Floor: {plan.maxFloors}
                         <br />
-                        Meeting: {plan.meetingRoomLimit}
+                        Meeting: {plan.maxMeetingRooms}
                       </td>
 
                       <td>

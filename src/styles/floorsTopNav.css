@@ -1,0 +1,47 @@
+/* Top container */
+.floors-nav {
+  display: flex;
+  gap: 10px;
+  padding: 12px 16px;
+  background-color: #ffffff;
+  border-bottom: 1px solid #e0e0e0;
+  overflow-x: auto;
+  scrollbar-width: thin;
+}
+
+/* Hide scrollbar (Chrome) */
+.floors-nav::-webkit-scrollbar {
+  height: 6px;
+}
+
+.floors-nav::-webkit-scrollbar-thumb {
+  background: #cfcfcf;
+  border-radius: 4px;
+}
+
+/* Floor tab button */
+.floor-tab {
+  padding: 8px 18px;
+  font-size: 14px;
+  font-weight: 500;
+  border: none;
+  border-radius: 20px;
+  background-color: #f1f3f5;
+  color: #333;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.2s ease;
+}
+
+/* Hover */
+.floor-tab:hover {
+  background-color: #e3f2fd;
+  color: #1976d2;
+}
+
+/* Active floor */
+.floor-tab.active {
+  background-color: #1976d2;
+  color: #ffffff;
+  box-shadow: 0 2px 6px rgba(25, 118, 210, 0.3);
+}

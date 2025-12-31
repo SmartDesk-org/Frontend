@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchCompanies } from "../../redux/slices/companySlice";
+import { fetchCompanies ,fetchHistories,fetchCompanyOverview } from "../../redux/slices/companySlice";
 import SubscriptionHistoryModal from "./SubscriptionHistoryModal";
+import CompanyOverviewModal from "./CompanyOverviewModal";
 
 export default function CompaniesPage() {
   const dispatch = useDispatch();
@@ -10,15 +11,13 @@ export default function CompaniesPage() {
   );
 
   const [selectedCompany, setSelectedCompany] = useState(null);
-
-  // 🔹 ADDED
+  const [overviewCompany, setOverviewCompany] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
 
   useEffect(() => {
     dispatch(fetchCompanies());
   }, [dispatch]);
 
-  // 🔹 ADDED (derived data, no logic changed)
   const filteredCompanies = companies?.filter((c) =>
     c.name.toLowerCase().includes(searchTerm.toLowerCase().trim())
   );
@@ -31,7 +30,6 @@ export default function CompaniesPage() {
         <div className="card-header d-flex justify-content-between align-items-center">
           <span>Companies List</span>
 
-          {/* 🔹 ADDED */}
           <input
             type="text"
             className="form-control form-control-sm w-25"
@@ -88,12 +86,20 @@ export default function CompaniesPage() {
                           ? new Date(c.modifiedAt).toLocaleString()
                           : "-"}
                       </td>
-                      <td>
+                      <td className="d-flex gap-2">
                         <button
                           className="btn btn-sm btn-outline-primary"
                           onClick={() => setSelectedCompany(c)}
                         >
                           View Subscriptions
+                        </button>
+
+                        {/* ✅ NEW */}
+                        <button
+                          className="btn btn-sm btn-outline-success"
+                          onClick={() => setOverviewCompany(c)}
+                        >
+                          View Overview
                         </button>
                       </td>
                     </tr>
@@ -105,10 +111,19 @@ export default function CompaniesPage() {
         </div>
       </div>
 
+      {/* Existing modal */}
       {selectedCompany && (
         <SubscriptionHistoryModal
           company={selectedCompany}
           onClose={() => setSelectedCompany(null)}
+        />
+      )}
+
+      {/* ✅ NEW modal */}
+      {overviewCompany && (
+        <CompanyOverviewModal
+          company={overviewCompany}
+          onClose={() => setOverviewCompany(null)}
         />
       )}
     </div>
