@@ -17,6 +17,8 @@
   overflow-y: auto;
 }
 
+
+
 /* Canvas wrapper */
 .canvas-wrapper {
   flex-grow: 1;
@@ -43,4 +45,56 @@
   background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
   box-shadow: 0 10px 30px rgba(0,0,0,0.1);
   border: 2px solid #333;
+}
+
+
+/* Status Colors */
+.resource-box.available { 
+    background-color: #28a745 !important; 
+    color: white !important; 
+    border-color: #1e7e34;
+}
+.resource-box.occupied { 
+    background-color: #dc3545 !important; 
+    color: white !important; 
+    border-color: #bd2130;
+}
+
+/* Feature Icons Overlay */
+.feature-icons-mini {
+    position: absolute;
+    bottom: 2px;
+    right: 2px;
+    display: flex;
+    gap: 2px;
+    font-size: 10px;
+    background: #28a745;
+    border-radius: 3px;
+    padding: 1px 3px;
+}
+
+/* Tooltip/Popup Styling */
+.resource-details-popup {
+    position: absolute;
+    z-index: 1050;
+    width: 220px;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    color: #333;
+    pointer-events: auto;
+}
+
+.resource-details-popup header {
+    padding: 8px 12px;
+    border-bottom: 1px solid #eee;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.feature-icons-mini .badge {
+  font-size: 3px;
+  padding: 4px 6px;
+  cursor: default;
 }
