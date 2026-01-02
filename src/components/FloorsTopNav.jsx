@@ -1,17 +1,13 @@
 import "../styles/floorsTopNav.css";
 
-export default function FloorsTopNav({
-  floors,
-  activeFloorId,
-  onSelect,
-}) {
+export default function FloorsTopNav({ floors, activeFloorId, onSelect }) {
   return (
-    <div className="floors-nav">
+    <div className="d-flex gap-2 mb-3 flex-wrap">
       {floors.map((f) => (
         <button
-          key={f.id}
-          className={`floor-tab ${
-            f.id === activeFloorId ? "active" : ""
+          key={f.floorId}
+          className={`btn btn-sm ${
+            f.id === activeFloorId ? "btn-dark" : "btn-outline-dark"
           }`}
           onClick={() => onSelect(f)}
         >

@@ -78,9 +78,15 @@ const floorSlice = createSlice({
       .addCase(createFloor.pending, (state) => {
         state.loading = true;
       })
-      .addCase(createFloor.fulfilled, (state) => {
+      .addCase(createFloor.fulfilled, (state, action) => {
         state.loading = false;
-      })
+
+        const newFloor = action.payload?.data;
+        if (newFloor) {
+            state.floors.push(newFloor);
+            state.activeFloor = newFloor; // auto select
+          }
+        })
       .addCase(createFloor.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;

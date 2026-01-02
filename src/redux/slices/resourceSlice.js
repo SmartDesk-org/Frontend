@@ -101,9 +101,15 @@ const resourceSlice = createSlice({
       })
 
       /* Create */
-      .addCase(createResource.fulfilled, (state) => {
+      .addCase(createResource.fulfilled, (state, action) => {
         state.loading = false;
-      })
+
+         const resource = action.payload?.data;
+         if (resource) {
+             state.resources.push(resource);
+           }
+        })
+
 
       /* Update position (optimistic) */
       .addCase(updateResourcePosition.fulfilled, (state, action) => {

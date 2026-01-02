@@ -4,7 +4,7 @@ import { Routes, Route } from "react-router-dom";
 
 // Public pages
 import LandingPage from "./pages/LandingPage";
-import LoginPage from "./pages/LoginPage";
+import LoginPage from "./pages/loginPage";
 import PurchaseSubscriptionPage from "./pages/PurchaseSubscriptionPage";
 import PaymentPage from "./pages/PaymentPage";
 
@@ -21,12 +21,12 @@ import SuperFeedbacksPage from "./pages/superAdminDashboardPages/FeedbacksPage"
 import CompanyAdminDashboardLayout from "./components/Layout/companyAdmin/CompanyAdminDashboardLayout";
 import EmployeesPage from "./pages/companyAdminDashboardPages/EmployeePage";
 import DesksPage from "./pages/companyAdminDashboardPages/DesksPage";
-import MeetingRoomsPage from "./pages/companyAdminDashboardPages/MeetingRoomsPage";
 import CompanySubPage from "./pages/companyAdminDashboardPages/CompanySubPage";
 import ForgotPassword from "./components/ForgotPassword";
 import ResetPassword from "./components/ResetPassword";
 import CompanyFeedbackpage from './pages/companyAdminDashboardPages/FeedbacksPage'
 import FloorLayoutPage from "./pages/companyAdminDashboardPages/FloorLayoutPage";
+import ResourceRegistrationPage from "./pages/companyAdminDashboardPages/ResourceRegistrationPage";
 
 function App() {
   return (
@@ -62,7 +62,7 @@ function App() {
         <Route index element={<FloorLayoutPage />} />
         <Route path="employees" element={<EmployeesPage />} />
         <Route path="desks" element={<DesksPage />} />
-        <Route path="rooms" element={<MeetingRoomsPage />} />
+        <Route path="resources" element={<ResourceRegistrationPage />} />
         <Route path="subscription" element={<CompanySubPage />} />
         <Route path="feedbacks" element={<CompanyFeedbackpage />} />
 

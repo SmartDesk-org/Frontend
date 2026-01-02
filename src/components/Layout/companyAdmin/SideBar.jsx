@@ -1,33 +1,36 @@
-// src/components/Layout/companyAdmin/SideBar.jsx
 import { NavLink } from "react-router-dom";
 
 export default function Sidebar() {
   return (
-    <div className="sidebar p-3 border-end" style={{ width: 220 }}>
-      <h5 className="mb-3">Company Admin</h5>
+    <div
+      className="bg-white border-end p-3"
+      style={{ width: 220, minHeight: "100vh" }}
+    >
+      <h6 className="fw-bold mb-3 text-uppercase text-muted">
+        Company Admin
+      </h6>
 
-      <NavLink className="d-block mb-2" to="/company-admin">
+      <NavLink className="d-block mb-2 nav-link" to="/company-admin">
         Floor Plan
       </NavLink>
 
-      <NavLink className="d-block mb-2" to="/company-admin/employees">
+      <NavLink className="d-block mb-2 nav-link" to="/company-admin/employees">
         Employees
       </NavLink>
 
-      <NavLink className="d-block mb-2" to="/company-admin/desks">
+      <NavLink className="d-block mb-2 nav-link" to="/company-admin/desks">
         Desks
       </NavLink>
 
-      <NavLink className="d-block mb-2" to="/company-admin/rooms">
-        Meeting Rooms
+      <NavLink className="d-block mb-2 nav-link" to="/company-admin/resources">
+        Manage Resources
       </NavLink>
 
-      <NavLink className="d-block mb-2" to="/company-admin/subscription">
+      <NavLink className="d-block mb-2 nav-link" to="/company-admin/subscription">
         Subscription
       </NavLink>
 
-      {/* ✅ NEW */}
-      <NavLink className="d-block mb-2" to="/company-admin/feedbacks">
+      <NavLink className="d-block mb-2 nav-link" to="/company-admin/feedbacks">
         Feedbacks
       </NavLink>
     </div>
