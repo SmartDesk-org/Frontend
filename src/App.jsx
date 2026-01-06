@@ -19,14 +19,14 @@ import SuperFeedbacksPage from "./pages/superAdminDashboardPages/FeedbacksPage"
 
 // Company Admin
 import CompanyAdminDashboardLayout from "./components/Layout/companyAdmin/CompanyAdminDashboardLayout";
-import FloorPlanPage from "./pages/companyAdminDashboardPages/FloorPlanPage";
 import EmployeesPage from "./pages/companyAdminDashboardPages/EmployeePage";
 import DesksPage from "./pages/companyAdminDashboardPages/DesksPage";
-import MeetingRoomsPage from "./pages/companyAdminDashboardPages/MeetingRoomsPage";
 import CompanySubPage from "./pages/companyAdminDashboardPages/CompanySubPage";
 import ForgotPassword from "./components/ForgotPassword";
 import ResetPassword from "./components/ResetPassword";
 import CompanyFeedbackpage from './pages/companyAdminDashboardPages/FeedbacksPage'
+import FloorLayoutPage from "./pages/companyAdminDashboardPages/FloorLayoutPage";
+import ResourceRegistrationPage from "./pages/companyAdminDashboardPages/ResourceRegistrationPage";
 
 function App() {
   return (
@@ -59,10 +59,10 @@ function App() {
         path="/company-admin"
         element={<CompanyAdminDashboardLayout />}
       >
-        <Route index element={<FloorPlanPage />} />
+        <Route index element={<FloorLayoutPage />} />
         <Route path="employees" element={<EmployeesPage />} />
         <Route path="desks" element={<DesksPage />} />
-        <Route path="rooms" element={<MeetingRoomsPage />} />
+        <Route path="resources" element={<ResourceRegistrationPage />} />
         <Route path="subscription" element={<CompanySubPage />} />
         <Route path="feedbacks" element={<CompanyFeedbackpage />} />
 

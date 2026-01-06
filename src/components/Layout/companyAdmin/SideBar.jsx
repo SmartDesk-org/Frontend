@@ -1,36 +1,28 @@
-// src/components/Layout/companyAdmin/SideBar.jsx
 import { NavLink, useNavigate } from "react-router-dom";
-// 🔴 ADJUST THESE PATHS to point to where your actual files are
 import axiosClient from "../../../redux/api/axiosClient";
 import { clearAuthToken } from "../../../redux/authToken";
 
 export default function Sidebar() {
   const navigate = useNavigate();
 
-  // Helper to manage active class styling dynamically
   const getNavLinkClass = ({ isActive }) =>
     `nav-link d-flex align-items-center gap-2 mb-1 p-3 rounded-3 transition-all ${
       isActive
-        ? "bg-primary text-white shadow-sm fw-medium" // Active State
-        : "text-dark hover-bg-light text-opacity-75" // Inactive State
+        ? "bg-primary text-white shadow-sm fw-medium" 
+        : "text-dark hover-bg-light text-opacity-75" 
     }`;
 
-  // --- LOGOUT HANDLER ---
   const handleLogout = async (e) => {
-    e.preventDefault(); // Prevent default anchor behavior
+    e.preventDefault(); 
 
     try {
-      // 1. Call server to delete the HttpOnly cookie
-      // This uses your custom axiosClient with 'withCredentials: true'
       await axiosClient.post("/Auth/logout");
     } catch (error) {
       console.error("Logout server call failed:", error);
-      // We continue to client-side logout even if server fails
+      
     } finally {
-      // 2. Clear client-side token
+    
       clearAuthToken();
-
-      // 3. Redirect to login
       navigate("/login");
     }
   };

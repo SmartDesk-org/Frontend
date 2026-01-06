@@ -1,0 +1,45 @@
+.floors-nav {
+  display: flex;
+  gap: 10px;
+  padding: 10px;
+  border-bottom: 1px solid #ddd;
+  background: #fafafa;
+}
+
+.floor-tab {
+  padding: 8px 16px;
+  border: none;
+  background: #e0e0e0;
+  cursor: pointer;
+  border-radius: 6px;
+}
+
+.floor-tab.active {
+  background: #1976d2;
+  color: white;
+}
+
+.floor-canvas {
+  position: relative;
+  margin: 20px;
+  border: 2px dashed #bbb;
+  background: #fdfdfd;
+}
+
+.resource-box {
+  position: absolute;
+  border: 1px solid #333;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: move;
+  user-select: none;
+}
+
+.resource-box.available {
+  background: #c8e6c9;
+}
+
+.resource-box.occupied {
+  background: #ffcdd2;
+}
