@@ -4,7 +4,7 @@ import { Routes, Route } from "react-router-dom";
 
 // Public pages
 import LandingPage from "./pages/LandingPage";
-import LoginPage from "./pages/LoginPage";
+import LoginPage from "./pages/loginPage";
 import PurchaseSubscriptionPage from "./pages/PurchaseSubscriptionPage";
 import PaymentPage from "./pages/PaymentPage";
 

@@ -25,9 +25,9 @@ export default function LoginForm() {
       .unwrap()
       .then((res) => {
         console.log("🟢 LOGIN SUCCESS:", res);
-        if(res?.role==1)
+        if(res?.data.role==1)
         navigate('/super-admin');
-        else if(res?.role==2)
+        else if(res?.data.role==2)
           navigate("/company-admin");
       })
       .catch((err) => {
@@ -44,7 +44,7 @@ export default function LoginForm() {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="d-flex flex-column gap-3">
+    <form onSubmit={handleSubmit} className="d-flex flex-column gap-3"> 
       {/* Email */}
       <div>
         <label htmlFor="email" className="form-label text-secondary mb-1">
