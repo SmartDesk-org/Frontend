@@ -44,7 +44,7 @@ export default function LoginForm() {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="d-flex flex-column gap-3">
+    <form onSubmit={handleSubmit} className="d-flex flex-column gap-3"> 
       {/* Email */}
       <div>
         <label htmlFor="email" className="form-label text-secondary mb-1">

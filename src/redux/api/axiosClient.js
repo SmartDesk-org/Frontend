@@ -2,7 +2,9 @@ import axios from "axios";
 import { getAuthToken, setAuthToken, clearAuthToken } from "../authToken";
 
 const axiosClient = axios.create({
-  baseURL: " http://localhost:5210/api",
+
+baseURL: " http://localhost:5210/api",
+
   withCredentials: true
 });
 axiosClient.interceptors.request.use(
