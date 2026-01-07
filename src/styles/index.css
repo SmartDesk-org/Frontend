@@ -1,9 +1,38 @@
 /* src/styles/index.css */
 
-/* Global styles */
+/* 1. Import the Fonts (Inter & JetBrains Mono) */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap');
+
+/* 2. Load Tailwind */
+@import "tailwindcss";
+
+/* 3. Configure Theme (Fonts + Animations) */
+@theme {
+  /* Set Inter as the default sans font for the "Precision" look */
+  --font-sans: "Inter", system-ui, sans-serif;
+  
+  /* Set JetBrains Mono for technical details */
+  --font-mono: "JetBrains Mono", monospace;
+
+  /* Your existing Shimmer Animation */
+  --animate-shimmer: shimmer 2s linear infinite;
+  @keyframes shimmer {
+    from { transform: translateX(-100%); }
+    to { transform: translateX(100%); }
+  }
+}
+.footer-link {
+  @apply !text-neutral-500 hover:!text-white transition-colors !no-underline;
+}
+
+.social-link {
+  @apply flex items-center gap-3 text-sm !text-neutral-500 hover:!text-white transition-colors !no-underline;
+}
+
+/* 4. Global Styles */
 body {
-  background-color: #ffffff;
-  color: #212529; /* Bootstrap dark text */
+  background-color: #08090A; /* Matches the dark section background */
+  color: #ffffff;
   margin: 0;
-  font-family: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  /* Font-family is now handled by Tailwind's --font-sans variable above */
 }
