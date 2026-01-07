@@ -1,50 +1,78 @@
 import axios from "axios";
 import { getAuthToken, setAuthToken, clearAuthToken } from "../authToken";
 
+/* ================= AXIOS CLIENT ================= */
+
 const axiosClient = axios.create({
 
 baseURL: "http://localhost:5210/api",
 
   withCredentials: true
 });
+
+/* ================= REQUEST INTERCEPTOR ================= */
+
 axiosClient.interceptors.request.use(
   (config) => {
     const token = getAuthToken();
+    console.log("🔵 [AXIOS] Access token from memory:", token);
+
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
+
     return config;
   },
   (error) => Promise.reject(error)
 );
+
+/* ================= RESPONSE INTERCEPTOR (REFRESH) ================= */
+
 axiosClient.interceptors.response.use(
   (response) => response,
   async (error) => {
     const originalRequest = error.config;
 
+    // 🔴 Do NOT retry refresh endpoint itself
+    if (originalRequest.url.includes("/Auth/refresh")) {
+      return Promise.reject(error);
+    }
+
+    // 🔴 Access token expired
     if (error.response?.status === 401 && !originalRequest._retry) {
       originalRequest._retry = true;
 
       try {
-        // 🔴 MUST USE axiosClient (proxy)
-        console.log("calling refresh");
-        
-        const refreshResponse = await axiosClient.post("/Auth/refresh");
-        console.log("rfresheed new token"+ refreshResponse.data);
-        
-        const newAccessToken =
-          refreshResponse.data;
+        console.log("🔄 [AXIOS] Access token expired. Calling refresh...");
 
-        if (!newAccessToken) throw new Error("No access token");
+        // ✅ MUST USE PLAIN AXIOS (NO INTERCEPTORS)
+        const refreshResponse = await axios.post(
+          "https://localhost:7046/api/Auth/refresh",
+          {},
+          { withCredentials: true }
+        );
 
+        const newAccessToken = refreshResponse.data;
+
+        if (!newAccessToken) {
+          throw new Error("No access token returned from refresh");
+        }
+
+        console.log("✅ [AXIOS] New access token received");
+
+        // 🔴 Store token for next requests
         setAuthToken(newAccessToken);
+
+        // 🔴 Retry original request with new token
         originalRequest.headers.Authorization =
           `Bearer ${newAccessToken}`;
 
         return axiosClient(originalRequest);
-      } catch (e) {
+      } catch (refreshError) {
+        console.error("❌ [AXIOS] Refresh token failed");
+
         clearAuthToken();
-        return Promise.reject(e);
+        return Promise.reject(refreshError);
       }
     }
 
@@ -53,76 +81,3 @@ axiosClient.interceptors.response.use(
 );
 
 export default axiosClient;
-
-
-// import axios from "axios";
-// import { getAuthToken, setAuthToken, clearAuthToken } from "../authToken";
-
-// const axiosClient = axios.create({
-//   baseURL: import.meta.env.VITE_API_BASE_URL,
-//   withCredentials: true, // refresh token cookie
-// });
-
-// /* ================= REQUEST ================= */
-
-// axiosClient.interceptors.request.use(
-//   (config) => {
-//     const token = getAuthToken();
-
-//     if (token) {
-//       config.headers.Authorization = `Bearer ${token}`;
-//     }
-
-//     return config;
-//   },
-//   (error) => Promise.reject(error)
-// );
-
-// /* ================= RESPONSE (REFRESH) ================= */
-
-// axiosClient.interceptors.response.use(
-//   (response) => response,
-//   async (error) => {
-//     const originalRequest = error.config;
-
-//     // 🔴 If access token expired
-//     if (error.response?.status === 401 && !originalRequest._retry) {
-//       originalRequest._retry = true;
-
-//       try {
-//         console.log("🔄 Access token expired. Calling refresh...");
-
-//         const refreshResponse = await axios.post(
-//           `${import.meta.env.VITE_API_BASE_URL}/Auth/refresh`,
-//           {},
-//           { withCredentials: true }
-//         );
-
-//         const newAccessToken =
-//           refreshResponse.data?.data?.accessToken;
-
-//         if (!newAccessToken) {
-//           throw new Error("No access token returned from refresh");
-//         }
-
-//         // 🔴 Store new token in memory
-//         setAuthToken(newAccessToken);
-
-//         // 🔴 Retry original request with new token
-//         originalRequest.headers.Authorization =
-//           `Bearer ${newAccessToken}`;
-
-//         return axiosClient(originalRequest);
-//       } catch (refreshError) {
-//         console.error("❌ Refresh token failed");
-
-//         clearAuthToken();
-//         return Promise.reject(refreshError);
-//       }
-//     }
-
-//     return Promise.reject(error);
-//   }
-// );
-
-// export default axiosClient;
