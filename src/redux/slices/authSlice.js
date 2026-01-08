@@ -13,7 +13,7 @@ export const login = createAsyncThunk(
   async ({ email, password }, { rejectWithValue }) => {
     try {
       console.log("🔵 [AUTH THUNK] Login started");
-      const res = await loginApi(email, password);
+      const res = await loginApi(email, password); // res is already data
       return res;
     } catch (err) {
       console.error("🔴 [AUTH THUNK] Login error:", err.response?.data || err);
@@ -59,20 +59,17 @@ export const resetPassword = createAsyncThunk(
 const authSlice = createSlice({
   name: "auth",
   initialState: {
-    accessToken: null,   // 🔴 IN MEMORY
+    accessToken: null,   // stored in Redux (UI state)
     user: null,
     loading: false,
     error: null,
-    message: null,      // 🔴 ADDED (forgot/reset feedback)
+    message: null,
   },
   reducers: {
-    setAccessToken: (state, action) => {
-      state.accessToken = action.payload;
-    },
     clearAuth: (state) => {
       state.accessToken = null;
-      clearAuthToken();
       state.user = null;
+      clearAuthToken(); // clear token from memory/storage
     },
   },
   extraReducers: (builder) => {
@@ -85,10 +82,10 @@ const authSlice = createSlice({
       })
       .addCase(login.fulfilled, (state, action) => {
         state.loading = false;
-        state.accessToken = action.payload.accessToken;
-        setAuthToken(action.payload.accessToken);
 
-        console.log("token stored " + state.accessToken);
+        state.accessToken = action.payload.data.accessToken;
+        setAuthToken(action.payload.data.accessToken);
+
 
         state.user = { email: action.meta.arg.email };
       })
@@ -129,5 +126,11 @@ const authSlice = createSlice({
   },
 });
 
-export const { setAccessToken, clearAuth } = authSlice.actions;
+/* ===================== EXPORTS ===================== */
+
+export const { clearAuth } = authSlice.actions;
+
+// ✅ Selector (correct way to read token)
+export const selectAccessToken = (state) => state.auth.accessToken;
+
 export default authSlice.reducer;
