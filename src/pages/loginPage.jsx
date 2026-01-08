@@ -39,10 +39,10 @@ export default function LoginPage() {
       {/* --- BACKGROUND EFFECTS --- */}
       <div className="absolute inset-0 w-full h-full">
         {/* Grid Pattern */}
-        <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px]" />
+        <div className="absolute inset-0 " />
 
         {/* Glowing Orb */}
-        <div className="glow-orb absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-indigo-600/20 blur-[120px] rounded-full pointer-events-none" />
+        <div className="glow-orb absolute  -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px]rounded-full pointer-events-none" />
       </div>
 
       {/* --- MAIN CARD --- */}

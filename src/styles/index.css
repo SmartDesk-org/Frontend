@@ -36,3 +36,8 @@ body {
   margin: 0;
   /* Font-family is now handled by Tailwind's --font-sans variable above */
 }
+
+@keyframes toast-progress {
+  from { transform: scaleX(1); }
+  to { transform: scaleX(0); }
+}
