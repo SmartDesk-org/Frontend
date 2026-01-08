@@ -5,7 +5,7 @@ import { getAuthToken, setAuthToken, clearAuthToken } from "../authToken";
 
 const axiosClient = axios.create({
 
-baseURL: "http://localhost:5210/api",
+baseURL: "https://localhost:7046/api",
 
   withCredentials: true
 });
