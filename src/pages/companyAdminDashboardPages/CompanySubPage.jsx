@@ -1,21 +1,48 @@
-import { useSelector } from "react-redux";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchSingleCompanyOverview } from "../../redux/slices/companySlice";
+import RenewSubscriptionModal from "../../components/companyAdmin/RenewSubscriptionModal";
 
-export default function CompanySubPage() {
-  const { plan, expiry, usage } = useSelector((s) => s.compSub);
+export default function CompanySubPage({ companyId }) {
+  const dispatch = useDispatch();
+  const { overview, loadingOverview } = useSelector((s) => s.company);
+
+  const [showRenew, setShowRenew] = useState(false);
+
+  useEffect(() => {
+  
+    dispatch(fetchSingleCompanyOverview());
+  }, [companyId, dispatch]);
+
+  if (loadingOverview) return <p>Loading...</p>;
+  if (!overview) return <p>No data</p>;
 
   return (
-    <div>
+    <div className="container py-4">
       <h3>Subscription</h3>
-      <p>Plan: <b>{plan}</b></p>
-      <p>Expiry: {expiry}</p>
 
-      <h5>Usage</h5>
-      <ul>
-        <li>Employees: {usage.employees}</li>
-        <li>Desks: {usage.desks}</li>
-      </ul>
+      <div className="card p-3 mb-3">
+        <p><b>Plan:</b> {overview.subscriptionName}</p>
+        <p>
+          <b>Expiry:</b>{" "}
+          {new Date(overview.subscriptionEndDate).toDateString()}
+        </p>
+        <p><b>Status:</b> {overview.subscriptionStatus}</p>
+      </div>
 
-      <button className="btn btn-warning">Upgrade Plan</button>
+      <button
+        className="btn btn-warning"
+        onClick={() => setShowRenew(true)}
+      >
+        Renew Subscription
+      </button>
+
+      {showRenew && (
+        <RenewSubscriptionModal
+          expiryDate={overview.subscriptionEndDate}
+          onClose={() => setShowRenew(false)}
+        />
+      )}
     </div>
   );
 }

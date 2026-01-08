@@ -14,6 +14,8 @@ export const login = createAsyncThunk(
     try {
       console.log("🔵 [AUTH THUNK] Login started");
       const res = await loginApi(email, password); // res is already data
+      console.log("from thunk login res",res);
+      
       return res;
     } catch (err) {
       console.error("🔴 [AUTH THUNK] Login error:", err.response?.data || err);
@@ -84,6 +86,8 @@ const authSlice = createSlice({
         state.loading = false;
 
         state.accessToken = action.payload.data.accessToken;
+        console.log("from slice login",action.payload.data.accessToken);
+        
         setAuthToken(action.payload.data.accessToken);
 
 
