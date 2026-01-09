@@ -35,6 +35,19 @@ export const getCompanyOverviewApi = async (companyId) => {
   return res;
 };
 
+/* ================= COMPANY OVERVIEW ================= */
+
+export const getSingleCompanyOverviewApi = async () => {
+  console.log("🔵 [COMPANY API] GET /SingleCompanyOverview");
+
+  const res = await axiosClient.get(
+    `Company/CompanyOverview`
+  );
+
+  console.log("🟢 Single Company overview fetched:", res.data);
+  return res;
+};
+
 
 /* ================= FLOORS ================= */
 
@@ -51,5 +64,19 @@ export const getResourcesByFloorApi = async (floorId) => {
   const res = await axiosClient.get(
     `/Floor/${floorId}/Resources`
   );
+  return res;
+};
+
+
+export const renewSubscriptionApi = async (payload) => {
+  console.log("🔵 [RENEW API] POST /Company/RenewSubscription");
+  console.log("➡️ Payload:", payload);
+
+  const res = await axiosClient.post(
+    "/Company/RenewSubscription",
+    payload
+  );
+
+  console.log("🟢 Renewal response:", res.data);
   return res;
 };
