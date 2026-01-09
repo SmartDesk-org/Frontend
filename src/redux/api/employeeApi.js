@@ -17,3 +17,11 @@ export const downloadEmployeeTemplate = () => {
 export const addEmployee = (employeeData) => {
   return axiosClient.post("/Employee", employeeData);
 };
+
+export const getEmployeesPaginated = (page, pageSize, search = "") => {
+  return axiosClient.get(
+    `/Employee/paginated?page=${page}&pageSize=${pageSize}&search=${encodeURIComponent(
+      search
+    )}`
+  );
+};

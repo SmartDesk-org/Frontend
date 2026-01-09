@@ -6,6 +6,7 @@ import { getAuthToken, setAuthToken, clearAuthToken } from "../authToken";
 const axiosClient = axios.create({
   baseURL: "http://localhost:5210/api",
   withCredentials: true, // refresh token cookie
+
 });
 
 /* ================= REQUEST INTERCEPTOR ================= */
@@ -45,7 +46,7 @@ axiosClient.interceptors.response.use(
 
         // ✅ MUST USE PLAIN AXIOS (NO INTERCEPTORS)
         const refreshResponse = await axios.post(
-          `${baseURL}/Auth/refresh`,
+          `http://localhost:5210/api/Auth/refresh`,
           {},
           { withCredentials: true }
         );

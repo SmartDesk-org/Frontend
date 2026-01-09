@@ -21,3 +21,10 @@ export const createFloorApi = async (payload) => {
   console.log("🟩 [FLOOR API] Floor created:", response.data);
   return response;
 };
+
+export const fetchFloorById = async (id) => {
+  // console.log(`🟦 [FLOOR API] GET /api/Floor/${id}`);
+  const response = await axiosClient.get(`/Floor/${id}`);
+  // console.log(`🟩 [FLOOR API] Floor ${id} fetched:`, response.data);
+  return response;
+};
