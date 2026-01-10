@@ -4,10 +4,9 @@ import store from "../store";
 /* ================= AXIOS CLIENT ================= */
 
 const axiosClient = axios.create({
+  baseURL: "http://localhost:5210/api",
+  withCredentials: true, // refresh token cookie
 
-baseURL: "https://localhost:7046/api",
-
-  withCredentials: true
 });
 
 /* ================= REQUEST INTERCEPTOR ================= */
@@ -47,7 +46,7 @@ axiosClient.interceptors.response.use(
 
         // ✅ MUST USE PLAIN AXIOS (NO INTERCEPTORS)
         const refreshResponse = await axios.post(
-          "https://localhost:7046/api/Auth/refresh",
+          `http://localhost:5210/api/Auth/refresh`,
           {},
           { withCredentials: true }
         );

@@ -5,14 +5,8 @@ export default function DesksPage() {
 
   return (
     <div>
-      <h3>Desks</h3>
-      <ul>
-        {desks.map((d) => (
-          <li key={d.id}>
-            {d.code} – {d.status}
-          </li>
-        ))}
-      </ul>
+      <h3 className="text-white">Live Map</h3>
+      
     </div>
   );
 }

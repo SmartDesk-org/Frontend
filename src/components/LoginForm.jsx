@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { login } from "../redux/slices/authSlice";
 import { useNavigate } from "react-router-dom";
+import { toast } from "./UI/Toast";
+import { setAuthToken } from "../redux/authToken";
 import {
   Mail,
   Lock,
@@ -26,27 +28,34 @@ export default function LoginForm() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("🔵 SUBMIT LOGIN →", email);
 
     dispatch(login({ email, password }))
       .unwrap()
       .then((res) => {
-          const role = res?.data?.role;
+        // --- 1. SAVE TOKEN (CRITICAL FIX) ---
+        // Assuming res.data is the token string, or res.data.accessToken
+        // Adjust based on your exact API response structure
+        const token = res.data?.accessToken || res.data;
+        setAuthToken(token);
 
-          if (role === 1) {
-            navigate("/super-admin");
-          } else if (role === 2) {
-            navigate("/company-admin");
-          }
-        })
+        // --- 2. SUCCESS TOAST ---
+        toast.success("Authentication successful. Redirecting...");
 
+        // --- 3. NAVIGATION ---
+        setTimeout(() => {
+          if (res?.data?.role == 1) navigate("/super-admin");
+          else if (res?.data?.role == 2) navigate("/company-admin");
+          else navigate("/dashboard");
+        }, 800);
+      })
       .catch((err) => {
-        console.error("🔴 LOGIN FAILED:", err);
+        toast.error(err?.message || "Invalid email or password.");
+        console.error("Login Failed:", err);
       });
   };
 
   const handleGoogleAuth = () => {
-    alert("Google Auth Dummy Button Clicked");
+    toast.info("Google Authentication is currently in sandbox mode.");
   };
 
   const handleForgotPassword = () => {
@@ -55,7 +64,7 @@ export default function LoginForm() {
 
   return (
     <form onSubmit={handleSubmit} className="flex flex-col gap-5">
-      {/* Email Input */}
+      {/* --- EMAIL INPUT --- */}
       <div className="space-y-1.5">
         <label
           htmlFor="email"
@@ -79,7 +88,7 @@ export default function LoginForm() {
         </div>
       </div>
 
-      {/* Password Input */}
+      {/* --- PASSWORD INPUT --- */}
       <div className="space-y-1.5">
         <div className="flex justify-between items-center ml-1">
           <label
@@ -120,15 +129,15 @@ export default function LoginForm() {
         </div>
       </div>
 
-      {/* Error Message */}
+      {/* --- ERROR MESSAGE --- */}
       {error && (
-        <div className="flex items-center gap-2 p-3 rounded-lg bg-red-500/10 border border-red-500/20 text-red-400 text-xs">
+        <div className="flex items-center gap-2 p-3 rounded-lg bg-red-500/10 border border-red-500/20 text-red-400 text-xs animate-in fade-in slide-in-from-top-1">
           <AlertCircle size={16} />
           <span>{error}</span>
         </div>
       )}
 
-      {/* Sign In Button */}
+      {/* --- SUBMIT BUTTON --- */}
       <button
         type="submit"
         disabled={loading}
@@ -137,7 +146,7 @@ export default function LoginForm() {
         {loading ? (
           <>
             <Loader2 size={18} className="animate-spin" />
-            <span>Signing in...</span>
+            <span>Verifying...</span>
           </>
         ) : (
           <>
@@ -150,7 +159,7 @@ export default function LoginForm() {
         )}
       </button>
 
-      {/* Divider */}
+      {/* --- DIVIDER --- */}
       <div className="relative flex items-center py-2">
         <div className="flex-grow border-t border-white/10"></div>
         <span className="flex-shrink-0 mx-4 text-xs text-neutral-500 uppercase tracking-widest">
@@ -159,7 +168,7 @@ export default function LoginForm() {
         <div className="flex-grow border-t border-white/10"></div>
       </div>
 
-      {/* Google Button */}
+      {/* --- GOOGLE BUTTON --- */}
       <button
         type="button"
         onClick={handleGoogleAuth}
