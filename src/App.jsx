@@ -115,6 +115,7 @@ import FloorLayoutPage from "./pages/companyAdminDashboardPages/FloorLayoutPage"
 import ResourceRegistrationPage from "./pages/companyAdminDashboardPages/ResourceRegistrationPage";
 import MainLayout from "./components/Layout/MainLayout";
 import NotFoundPage from "./pages/404";
+import RenewelPaymentPage from "./pages/RenewelPaymentPage";
 
 // --- UTILITY: SCROLL TO TOP ---
 // Ensures that when you click a footer link, the new page starts at the top
@@ -232,6 +233,7 @@ function App() {
         <Route path="/login" element={<LoginPage />} />
         <Route path="/purchase" element={<PurchaseSubscriptionPage />} />
         <Route path="/payment" element={<PaymentPage />} />
+        <Route path="/renewelPayment" element={<RenewelPaymentPage/>}/>
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/reset-password" element={<ResetPassword />} />
 

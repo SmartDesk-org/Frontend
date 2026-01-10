@@ -1,6 +1,6 @@
 import axios from "axios";
 import { getAuthToken, setAuthToken, clearAuthToken } from "../authToken";
-
+import store from "../store";
 /* ================= AXIOS CLIENT ================= */
 
 const axiosClient = axios.create({
@@ -14,7 +14,7 @@ baseURL: "https://localhost:7046/api",
 
 axiosClient.interceptors.request.use(
   (config) => {
-    const token = getAuthToken();
+    const token = store.getState().auth.accessToken;
     console.log("🔵 [AXIOS] Access token from memory:", token);
 
     if (token) {

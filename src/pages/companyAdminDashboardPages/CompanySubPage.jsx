@@ -17,19 +17,41 @@ export default function CompanySubPage({ companyId }) {
   if (loadingOverview) return <p>Loading...</p>;
   if (!overview) return <p>No data</p>;
 
+  const {
+    companyName,
+    desksCount,
+    desksLimit,
+    employeesCount,
+    employeesLimit,
+    floorsCount,
+    floorsLimit,
+    meetingRoomsCount,
+    meetingRoomsLimit,
+  } = overview;
+
   return (
     <div className="container py-4">
-      <h3>Subscription</h3>
+      <h3>Company Overview</h3>
 
       <div className="card p-3 mb-3">
-        <p><b>Plan:</b> {overview.subscriptionName}</p>
-        <p>
-          <b>Expiry:</b>{" "}
-          {new Date(overview.subscriptionEndDate).toDateString()}
-        </p>
-        <p><b>Status:</b> {overview.subscriptionStatus}</p>
-      </div>
+        <p><b>Company:</b> {companyName}</p>
 
+        <p>
+          <b>Desks:</b> {desksCount} / {desksLimit}
+        </p>
+
+        <p>
+          <b>Employees:</b> {employeesCount} / {employeesLimit}
+        </p>
+
+        <p>
+          <b>Floors:</b> {floorsCount} / {floorsLimit}
+        </p>
+
+        <p>
+          <b>Meeting Rooms:</b> {meetingRoomsCount} / {meetingRoomsLimit}
+        </p>
+      </div>
       <button
         className="btn btn-warning"
         onClick={() => setShowRenew(true)}
@@ -41,6 +63,7 @@ export default function CompanySubPage({ companyId }) {
         <RenewSubscriptionModal
           expiryDate={overview.subscriptionEndDate}
           onClose={() => setShowRenew(false)}
+          companyId={overview.companyId}
         />
       )}
     </div>

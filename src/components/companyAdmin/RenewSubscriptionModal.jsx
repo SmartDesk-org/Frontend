@@ -4,9 +4,12 @@ import {
   submitRenewal,
   resetRenewalState,
 } from "../../redux/slices/companySlice";
-
-export default function RenewSubscriptionModal({ onClose, expiryDate }) {
+import { useNavigate } from "react-router-dom";
+export default function RenewSubscriptionModal({ onClose, expiryDate ,companyId}) {
   const dispatch = useDispatch();
+  console.log("from modal",companyId);
+  
+  const navigate=useNavigate();
 
   const {
     loadingRenewal,
@@ -30,8 +33,12 @@ export default function RenewSubscriptionModal({ onClose, expiryDate }) {
 
   if (renewalSuccess) {
     return (
-      <div className="modal-backdrop show">
-        <div className="modal d-block">
+      <>
+        <div className="modal-backdrop show" style={{ zIndex: 1040 }} />
+        <div
+          className="modal show d-block"
+          style={{ zIndex: 1050 }}
+        >
           <div className="modal-dialog">
             <div className="modal-content p-4 text-center">
               <h5>Renewal Created</h5>
@@ -42,6 +49,13 @@ export default function RenewSubscriptionModal({ onClose, expiryDate }) {
                 onClick={() => {
                   dispatch(resetRenewalState());
                   onClose();
+                  navigate("/renewelPayment",{
+                    state:{
+                      companyId
+                    }
+                  }
+                    
+                  );
                 }}
               >
                 OK
@@ -49,15 +63,20 @@ export default function RenewSubscriptionModal({ onClose, expiryDate }) {
             </div>
           </div>
         </div>
-      </div>
+      </>
     );
   }
 
   /* ================= FORM ================= */
 
   return (
-    <div className="modal-backdrop show">
-      <div className="modal d-block">
+    <>
+      <div className="modal-backdrop show" style={{ zIndex: 1040 }} />
+
+      <div
+        className="modal show d-block"
+        style={{ zIndex: 1050 }}
+      >
         <div className="modal-dialog">
           <div className="modal-content p-4">
             <h5>Renew Subscription</h5>
@@ -122,6 +141,6 @@ export default function RenewSubscriptionModal({ onClose, expiryDate }) {
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 }

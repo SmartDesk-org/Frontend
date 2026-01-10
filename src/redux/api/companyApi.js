@@ -41,7 +41,7 @@ export const getSingleCompanyOverviewApi = async () => {
   console.log("🔵 [COMPANY API] GET /SingleCompanyOverview");
 
   const res = await axiosClient.get(
-    `Company/CompanyOverview`
+    `Company/SingleCompanyOverview`
   );
 
   console.log("🟢 Single Company overview fetched:", res.data);
