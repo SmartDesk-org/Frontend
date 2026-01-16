@@ -2,30 +2,28 @@ import React, { useRef } from "react";
 import LoginForm from "../components/LoginForm";
 import { gsap } from "gsap";
 import { useGSAP } from "@gsap/react";
-import { Layout } from "lucide-react";
+import { Terminal } from "lucide-react";
 
 export default function LoginPage() {
   const containerRef = useRef();
 
   useGSAP(
     () => {
-      // Background Glow Animation
-      gsap.to(".glow-orb", {
-        scale: 1.2,
-        opacity: 0.4,
-        duration: 5,
-        repeat: -1,
-        yoyo: true,
-        ease: "sine.inOut",
+      // Mechanical Grid Reveal
+      gsap.from(".grid-line", {
+        scaleY: 0,
+        duration: 0.8,
+        stagger: 0.05,
+        ease: "power3.inOut",
       });
 
-      // Content Entrance
-      gsap.from(".login-content", {
-        y: 30,
+      // Terminal Card Entrance (Sharp slide up)
+      gsap.from(".login-terminal", {
+        y: 40,
         opacity: 0,
-        duration: 1,
-        ease: "power3.out",
-        stagger: 0.1,
+        duration: 0.5,
+        delay: 0.4,
+        ease: "power2.out",
       });
     },
     { scope: containerRef }
@@ -34,42 +32,61 @@ export default function LoginPage() {
   return (
     <div
       ref={containerRef}
-      className="relative min-h-screen w-full bg-[#050505] flex items-center justify-center overflow-hidden p-6"
+      className="relative min-h-screen w-full bg-[#050505] flex items-center justify-center overflow-hidden p-6 font-mono"
     >
-      {/* --- BACKGROUND EFFECTS --- */}
-      <div className="absolute inset-0 w-full h-full">
-        {/* Grid Pattern */}
-        <div className="absolute inset-0 " />
-
-        {/* Glowing Orb */}
-        <div className="glow-orb absolute  -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px]rounded-full pointer-events-none" />
+      {/* --- BACKGROUND: TECHNICAL GRID --- */}
+      <div className="absolute inset-0 pointer-events-none opacity-20">
+        <div
+          className="absolute inset-0"
+          style={{
+            backgroundImage: `
+              linear-gradient(to right, #333 1px, transparent 1px),
+              linear-gradient(to bottom, #333 1px, transparent 1px)
+            `,
+            backgroundSize: "24px 24px",
+          }}
+        />
+        {/* Vignette */}
+        <div className="absolute inset-0 bg-radial-gradient from-transparent to-[#050505]" />
       </div>
 
-      {/* --- MAIN CARD --- */}
-      <div className="login-content relative w-full max-w-md z-10">
-        {/* Logo Header */}
-        <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-white/5 border border-white/10 mb-4">
-            <Layout className="text-white" size={24} strokeWidth={1.5} />
+      {/* --- MAIN TERMINAL CARD --- */}
+      <div className="login-terminal relative w-full max-w-[380px] z-10 bg-[#0A0A0A] border border-white/10 shadow-2xl">
+        
+        {/* Terminal Header Strip */}
+        <div className="flex items-center justify-between px-4 py-2 border-b border-white/10 bg-white/[0.02]">
+          <div className="flex items-center gap-2">
+            <Terminal size={12} className="text-neutral-500" />
+            <span className="text-[10px] font-bold uppercase tracking-widest text-neutral-400">
+              LOGIN
+            </span>
           </div>
-          <h2 className="text-3xl font-medium text-white tracking-tight">
-            Welcome back
-          </h2>
-          <p className="text-neutral-400 text-sm mt-2 font-light">
-            Enter your credentials to access your workspace.
-          </p>
+          <div className="flex gap-1.5">
+            <div className="w-1.5 h-1.5 rounded-full bg-neutral-800"></div>
+            <div className="w-1.5 h-1.5 rounded-full bg-neutral-800"></div>
+          </div>
         </div>
 
-        {/* Form Container - SHADOW REMOVED HERE */}
-        {/* Removed 'shadow-2xl' from the className below */}
-        <div className="bg-[#0A0A0A]/80 backdrop-blur-xl border border-white/10 rounded-2xl p-8">
+        {/* Content Area */}
+        <div className="p-8">
+          <div className="mb-8">
+            <h2 className="text-lg font-bold text-white tracking-tight uppercase">
+              Identify User
+            </h2>
+            <p className="text-[10px] text-neutral-500 mt-1 border-l-2 border-white/10 pl-2 leading-relaxed">
+              ENTER CREDENTIALS TO INITIALIZE WORKSPACE SESSION.
+            </p>
+          </div>
+
           <LoginForm />
         </div>
 
-        {/* Footer */}
-        <p className="text-center text-neutral-500 text-xs mt-8">
-          © 2025 SmartDesk Inc. All rights reserved.
-        </p>
+        {/* Footer Strip */}
+        <div className="px-4 py-2 border-t border-white/10 bg-white/[0.02] text-center">
+          <p className="text-[9px] text-neutral-600 uppercase tracking-widest">
+            © 2025 SmartDesk Sys. // All Rights Reserved
+          </p>
+        </div>
       </div>
     </div>
   );

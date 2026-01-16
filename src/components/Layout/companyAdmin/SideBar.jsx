@@ -149,7 +149,7 @@ export default function Sidebar() {
                 <Layout size={20} className="text-white" />
               </div>
               <span className="sidebar-text text-base font-bold tracking-widest uppercase text-white group-hover:text-neutral-300 transition-colors">
-                SmartServe
+                SmartDesk
               </span>
             </Link>
             

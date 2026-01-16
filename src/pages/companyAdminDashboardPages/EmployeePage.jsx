@@ -8,6 +8,8 @@ import UploadPreview from "../../components/EmployeesUpload/UploadPreview";
 import AddEmployeeModal from "../../components/EmployeesUpload/AddEmployeeModal";
 import Pagination from "../../components/EmployeesPagination";
 import gsap from "gsap";
+import * as signalR from "@microsoft/signalr";
+
 import { useGSAP } from "@gsap/react";
 import {
   Search,
@@ -129,6 +131,9 @@ const SidebarContent = ({
 );
 
 export default function EmployeesPage() {
+  const [progress, setProgress] = useState(0);
+  const signalRRef = useRef(null);
+
   const dispatch = useDispatch();
   const { list, loading, totalRecords } = useSelector((s) => s.employees);
   const containerRef = useRef(null);
@@ -143,6 +148,45 @@ export default function EmployeesPage() {
   const [showAddModal, setShowAddModal] = useState(false);
   const [isAdding, setIsAdding] = useState(false);
   const [showMobileSidebar, setShowMobileSidebar] = useState(false);
+  // Inside EmployeesPage.jsx
+
+  useEffect(() => {
+    // 1. Build the connection
+    const connection = new signalR.HubConnectionBuilder()
+      .withUrl("http://localhost:5210/uploadProgressHub", {
+        accessTokenFactory: () => localStorage.getItem("token"), // Ensure this key matches your screenshot
+        skipNegotiation: true,
+        transport: signalR.HttpTransportType.WebSockets,
+      })
+      .withAutomaticReconnect()
+      .build();
+
+    signalRRef.current = connection;
+
+    // 2. Start the connection safely
+    const startConnection = async () => {
+      try {
+        await connection.start();
+        console.log("✅ SignalR connected");
+
+        connection.on("UploadProgress", (percent) => {
+          console.log("📡 Upload progress:", percent);
+          setProgress(percent);
+        });
+      } catch (err) {
+        console.error("❌ SignalR error:", err);
+      }
+    };
+
+    startConnection();
+
+    // 3. Cleanup: Only stop if connected to avoid "start before stop" error
+    return () => {
+      if (connection.state === signalR.HubConnectionState.Connected) {
+        connection.stop();
+      }
+    };
+  }, []); // Empty dependency array
 
   // 🟢 Debounce Logic: Update 'debouncedSearch' 500ms after user stops typing
   useEffect(() => {
@@ -343,8 +387,12 @@ export default function EmployeesPage() {
               <UploadPreview
                 data={preview}
                 onCancel={cancelUpload}
-                onConfirm={confirmUpload}
+                onConfirm={() => {
+                  setProgress(0); // reset progress
+                  confirmUpload(); // start upload
+                }}
                 uploading={uploading}
+                progress={progress}
               />
             ) : (
               <div className="content-entry max-w-6xl mx-auto w-full flex-1 flex flex-col">
