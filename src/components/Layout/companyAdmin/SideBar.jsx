@@ -191,7 +191,7 @@ export default function Sidebar() {
             <div className="section-label px-6 text-[10px] font-mono text-neutral-600 uppercase tracking-widest mt-6 select-none">
               Assets
             </div>
-            <NavItem to="/company-admin/resources" icon={Package} label="Inventory" />
+            <NavItem to="/company-admin/resources" icon={Package} label="Manage Assets" />
             <NavItem to="/company-admin/subscription" icon={CreditCard} label="Subscription" />
             <NavItem to="/company-admin/feedbacks" icon={MessageSquare} label="Feedback" />
           </div>

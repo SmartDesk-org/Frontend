@@ -309,7 +309,6 @@ import ResetPassword from "./components/ResetPassword";
 import CompaniesPage from "./pages/superAdminDashboardPages/CompaniesPage";
 import PlansPage from "./pages/superAdminDashboardPages/PlansPage";
 import MessagesPage from "./pages/superAdminDashboardPages/MessagesPage";
-import AnnouncementsPage from "./pages/superAdminDashboardPages/AnnouncementsPage";
 import SuperAdminsPage from "./pages/superAdminDashboardPages/SuperAdminsPage";
 import SuperFeedbacksPage from "./pages/superAdminDashboardPages/FeedbacksPage";
 
@@ -547,7 +546,6 @@ function App() {
             <Route path="companies" element={<CompaniesPage />} />
             <Route path="plans" element={<PlansPage />} />
             <Route path="messages" element={<MessagesPage />} />
-            <Route path="announcements" element={<AnnouncementsPage />} />
             <Route path="superadmins" element={<SuperAdminsPage />} />
             <Route path="feedbacks" element={<SuperFeedbacksPage />} />
           </Route>
