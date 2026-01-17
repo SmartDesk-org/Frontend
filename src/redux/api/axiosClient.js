@@ -97,7 +97,7 @@ import store from "../store";
 /* ================= AXIOS CLIENT ================= */
 
 const axiosClient = axios.create({
-  baseURL: "http://localhost:5210/api",
+  baseURL: "https://localhost:7046/api",
   withCredentials: true, // needed for cookies
 });
 
@@ -146,7 +146,7 @@ axiosClient.interceptors.response.use(
 
         // Call Refresh Endpoint
         const refreshResponse = await axios.post(
-          `http://localhost:5210/api/Auth/refresh`,
+          `http://localhost:7046/api/Auth/refresh`,
           {},
           { withCredentials: true }
         );

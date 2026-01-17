@@ -289,6 +289,14 @@ import SuperAdminDashboardLayout from "./components/Layout/superAdmin/SuperAdmin
 import CompanyAdminDashboardLayout from "./components/Layout/companyAdmin/CompanyAdminDashboardLayout";
 import MainLayout from "./components/Layout/MainLayout";
 
+
+// --- NEW EMPLOYEE IMPORTS ---
+import EmployeeLayout from "./components/Layout/employee/EmployeeLayout";
+import EmployeeDashboard from "./pages/employeeDashboardPages/EmployeeDashboard";
+import EmployeeLiveMap from "./pages/employeeDashboardPages/EmployeeLiveMap";
+import MyBookingsPanel from "./pages/employeeDashboardPages/MyBookingPanel";
+
+
 // --- PUBLIC PAGES ---
 import LandingPage from "./pages/LandingPage";
 import ProductTemplate from "./pages/FooterComponents/ProductTemplate";
@@ -401,6 +409,8 @@ const PublicRoute = () => {
       return <Navigate to="/super-admin" replace />;
     if (user.role === ROLES.CompanyAdmin)
       return <Navigate to="/company-admin" replace />;
+
+    if (user.role === ROLES.Employee) return <Navigate to="/employee" replace />;
     // Default fallback
     return <Navigate to="/" replace />;
   }
@@ -568,6 +578,18 @@ function App() {
           </Route>
         </Route>
 
+
+          {/* ----------------------------------------------------------------- */}
+          {/* EMPLOYEE DASHBOARD (Role: 3)                                     */}
+          {/* ----------------------------------------------------------------- */}
+          <Route element={<ProtectedRoute allowedRoles={[ROLES.Employee]} />}>
+            <Route path="/employee" element={<EmployeeLayout />}>
+              <Route index element={<EmployeeDashboard />} />
+              <Route path="map" element={<EmployeeLiveMap />} />
+              <Route path="my-bookings" element={<MyBookingsPanel />} />
+              {/* Add future employee-specific pages here */}
+            </Route>
+          </Route>
         {/* ----------------------------------------------------------------- */}
         {/* SHARED PROTECTED ROUTES                                           */}
         {/* ----------------------------------------------------------------- */}
