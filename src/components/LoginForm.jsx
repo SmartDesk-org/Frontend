@@ -38,6 +38,7 @@ export default function LoginForm() {
         setTimeout(() => {
           if (res?.data?.role == 1) navigate("/super-admin");
           else if (res?.data?.role == 2) navigate("/company-admin");
+          else if(res?.data?.role==3)navigate ("/employee")
           else navigate("/dashboard");
         }, 800);
       })
