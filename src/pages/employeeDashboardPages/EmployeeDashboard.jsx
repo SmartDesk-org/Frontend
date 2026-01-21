@@ -55,9 +55,10 @@ export default function EmployeeDashboard() {
       </div>
 
       {/* Active Schedule Section */}
-      <section className="bg-black/40 p-1 rounded-3xl">
+      {/* <section className="bg-black/40 p-1 rounded-3xl">
         <MyBookingsPanel />
-      </section>
+      </section> */}
+      
     </div>
   );
 }

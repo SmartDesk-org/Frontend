@@ -4,35 +4,72 @@ import { toast } from 'react-hot-toast';
 import { X, Clock, Calendar, ShieldCheck, Zap, Monitor } from 'lucide-react';
 import moment from 'moment';
 
-export default function BookingModal({ resource, onClose }) {
+export default function BookingModal({ resource, onClose, onBooked }) {
   const meta = JSON.parse(resource.metadataJson || "{}");
 
   const [times, setTimes] = useState({
-    start: moment().format("YYYY-MM-DDTHH:mm"),
+    start: moment().add(5, 'minutes').format("YYYY-MM-DDTHH:mm"),
     end: moment().add(1, 'hour').format("YYYY-MM-DDTHH:mm")
   });
 
   const [loading, setLoading] = useState(false);
 
-  const handleBook = async () => {
-    if (moment(times.end).isBefore(moment(times.start))) {
-      return toast.error("Checkout time cannot be before Check-in time");
+  const validateBooking = () => {
+    const start = moment(times.start);
+    const end = moment(times.end);
+    const now = moment();
+
+    if (!times.start || !times.end) {
+      toast.error("Please select both check-in and check-out time");
+      return false;
     }
+
+    if (start.isBefore(now)) {
+      toast.error("Check-in time cannot be in the past");
+      return false;
+    }
+
+    if (end.isSameOrBefore(start)) {
+      toast.error("Check-out time must be after check-in time");
+      return false;
+    }
+
+    const durationMinutes = end.diff(start, 'minutes');
+
+    if (durationMinutes < 30) {
+      toast.error("Minimum booking duration is 30 minutes");
+      return false;
+    }
+
+    if (durationMinutes > 480) {
+      toast.error("Maximum booking duration is 8 hours");
+      return false;
+    }
+
+    return true;
+  };
+
+  const handleBook = async () => {
+    if (loading) return;
+    if (!validateBooking()) return;
 
     try {
       setLoading(true);
+
       await axiosClient.post(`/ResourceBooking/${resource.id}`, {
-        // resourceId: resource.id,
         resourceTypeId: resource.resourceTypeId,
         startTime: new Date(times.start).toISOString(),
         endTime: new Date(times.end).toISOString()
       });
 
-      toast.success("Workspace reserved successfully!");
+      toast.success("Workspace reserved successfully");
+      onBooked?.();
       onClose();
-      window.location.reload();
     } catch (err) {
-      toast.error(err.response?.data?.message || "Booking failed. Slot may be taken.");
+      toast.error(
+        err.response?.data?.message ||
+        "Booking failed. This slot may already be reserved."
+      );
     } finally {
       setLoading(false);
     }
@@ -54,9 +91,11 @@ export default function BookingModal({ resource, onClose }) {
             >
               {resource.resourceTypeId === 1 ? 'Workstation' : 'Conference Room'}
             </div>
+
             <h4 className="text-xl sm:text-2xl font-bold text-white mb-1">
               Confirm Reservation
             </h4>
+
             <p className="text-xs sm:text-sm text-neutral-500 font-medium">
               Resource ID: <span className="text-neutral-300">#{resource.id} ({meta.name})</span>
             </p>
@@ -103,6 +142,7 @@ export default function BookingModal({ resource, onClose }) {
               </label>
               <input
                 type="datetime-local"
+                min={moment().format("YYYY-MM-DDTHH:mm")}
                 className="w-full bg-black border border-neutral-800 rounded-2xl px-4 py-3 text-sm text-white focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none"
                 value={times.start}
                 onChange={e => setTimes({ ...times, start: e.target.value })}
@@ -115,6 +155,7 @@ export default function BookingModal({ resource, onClose }) {
               </label>
               <input
                 type="datetime-local"
+                min={times.start}
                 className="w-full bg-black border border-neutral-800 rounded-2xl px-4 py-3 text-sm text-white focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none"
                 value={times.end}
                 onChange={e => setTimes({ ...times, end: e.target.value })}
@@ -126,7 +167,7 @@ export default function BookingModal({ resource, onClose }) {
           <div className="flex gap-3 p-4 bg-blue-500/5 border border-blue-500/10 rounded-2xl">
             <ShieldCheck className="text-blue-500 shrink-0" size={18} />
             <p className="text-[11px] text-neutral-400 leading-relaxed">
-              By confirming, you agree to release this workspace on time. Repeated failure may affect booking priority.
+              Please release the workspace on time. Repeated misuse may affect future bookings.
             </p>
           </div>
 
@@ -148,7 +189,7 @@ export default function BookingModal({ resource, onClose }) {
               {loading ? (
                 <>
                   <div className="w-4 h-4 border-2 border-black/20 border-t-black rounded-full animate-spin"></div>
-                  Finalizing...
+                  Booking...
                 </>
               ) : (
                 'Secure This Spot'
