@@ -30,6 +30,7 @@ export const createResource = createAsyncThunk(
   "resource/create",
   async (payload, { rejectWithValue }) => {
     try {
+      console.log("from thunk ",payload);
       const res = await createResourceApi(payload);
       return res.data;
     } catch (err) {

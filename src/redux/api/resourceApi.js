@@ -7,7 +7,7 @@ export const createResourceApi = async (payload) => {
 
   const response = await axiosClient.post("/Resource", payload);
 
-  console.log("🟩 [RESOURCE API] Resource created:", response.data);
+  console.log("🟩 [RESOURCE API] Resource created:");
   return response;
 };
 

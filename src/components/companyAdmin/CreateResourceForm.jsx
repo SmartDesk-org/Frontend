@@ -16,11 +16,14 @@ export default function CreateResourceForm({ floorId, onHide, show }) {
   if (!show) return null;
 
   const handleSubmit = (e) => {
+    console.log("clicked submit");
+    
     e.preventDefault();
     dispatch(
       createResource({
         floorId,
         resourceTypeId: type,
+        resourceName:meta.name,
         x: 100,
         y: 100,
         width: 60,

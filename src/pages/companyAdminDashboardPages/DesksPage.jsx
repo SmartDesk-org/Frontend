@@ -212,7 +212,7 @@ export default function DesksPage() {
                   type="text" 
                   placeholder="Find a desk..." 
                   value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
+                  onChange={(e) => setSearchTerm(e.target.value.trim())}
                   className="bg-[#111] border border-neutral-800 rounded-full pl-9 pr-4 py-1.5 text-xs text-white focus:border-neutral-600 outline-none w-48 transition-all focus:w-64"
               />
           </div>
